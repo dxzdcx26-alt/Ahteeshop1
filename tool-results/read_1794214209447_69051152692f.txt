@@ -1,0 +1,485 @@
+     1→     1→
+     2→     2→    <!DOCTYPE html>
+     3→     3→    <html lang="en">
+     4→     4→
+     5→     5→    <head>
+     6→     6→
+     7→     7→        <meta charset="UTF-8">
+     8→     8→        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     9→     9→        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    10→    10→
+    11→    11→                        <meta property="og:site_name" content="Ahtee | เติมเกมอัตโนมัติ 24 ชม.">
+    12→    12→        <meta property="og:title" content="Ahtee | เติมเกมอัตโนมัติ 24 ชม. - ยินดีต้อนรับ">
+    13→    13→        <meta property="og:type" content="website">
+    14→    14→        <meta property="og:url" content="https://shopdiva.spacexnet.xyz/?page=home">
+    15→    15→        <meta property="og:locale" content="th_TH">
+    16→    16→        <meta name="twitter:card" content="summary_large_image">
+    17→    17→                <meta property="og:description" content="Ahtee">
+    18→    18→        <meta name="description" content="Ahtee">
+    19→    19→
+    20→    20→        <title>Ahtee | เติมเกมอัตโนมัติ 24 ชม.</title>
+    21→    21→        
+    22→    22→        <link rel="stylesheet" href="services/styles/styles.css">
+    23→    23→        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    24→    24→        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    25→    25→        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    26→    26→        <link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    27→    27→        <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    28→    28→        <!-- <link rel="stylesheet" href="services/gshake/css/box.css"> -->
+    29→    29→        <link href="https://kit-pro.fontawesome.com/releases/v6.2.0/css/pro.min.css" rel="stylesheet">
+    30→    30→        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    31→    31→        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    32→    32→        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    33→    33→        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    34→    34→        <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    35→    35→        <link rel="preconnect" href="https://fonts.googleapis.com">
+    36→    36→        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    37→    37→        <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@600&family=Kanit&display=swap" rel="stylesheet">
+    38→    38→        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    39→    39→        <script src="https://cdnjs.cloudflare.com/ajax/libs/chart.js/2.8.0/chart.bundle.min.js"></script>
+    40→    40→
+    41→    41→        <style>
+    42→    42→            :root {
+    43→    43→                --main: #d4af37;
+    44→    44→                --sub: #f3d77a;
+    45→    45→                --font: #d9d2c3;
+    46→    46→                --sub-opa-50: #d4af3780;
+    47→    47→                --sub-opa-25: #d4af37;
+    48→    48→            }
+    49→    49→        </style>
+    50→    50→        <link rel="stylesheet" href="services/styles/styles.css">
+    51→    51→        <style>
+    52→    52→            *,
+    53→    53→            html,
+    54→    54→            body,
+    55→    55→            h1,
+    56→    56→            h2,
+    57→    57→            h3,
+    58→    58→            h4,
+    59→    59→            h5,
+    60→    60→            h6,
+    61→    61→            span,
+    62→    62→            small,
+    63→    63→            p,
+    64→    64→            button,
+    65→    65→            .btn,
+    66→    66→            .nav-link,
+    67→    67→            .text-dark,
+    68→    68→            .text-white,
+    69→    69→            .text-secondary,
+    70→    70→            .underline-active {
+    71→    71→                color: var(--font);
+    72→    72→            }
+    73→    73→            .bg-custom{
+    74→    74→              background: linear-gradient(135deg, rgba(255, 255,255 , 0.1)  ,  rgba(255, 255,255 , 0)  );
+    75→    75→              backdrop-filter: blur(30px);
+    76→    76→              -webkit-backdrop-filter: blur(30px);
+    77→    77→              box-shadow: 0 8px 32px 0 rgba(0,0,0,0.37);
+    78→    78→          }
+    79→    79→            ::-webkit-scrollbar {
+    80→    80→    width: 3px
+    81→    81→}
+    82→    82→            .owl-items {
+    83→    83→                max-width: 220px;
+    84→    84→                max-height: 220px;
+    85→    85→
+    86→    86→            }
+    87→    87→
+    88→    88→
+    89→    89→            .owl-items img {
+    90→    90→                border-radius: 25px !important;
+    91→    91→                animation: glow 2s infinite ease-in-out;
+    92→    92→            }
+    93→    93→
+    94→    94→            body {
+    95→    95→                background-image: url('');
+    96→    96→                background-repeat: no-repeat;
+    97→    97→                background-attachment: fixed;
+    98→    98→                background-position: center;
+    99→    99→                background-size: cover;
+   100→   100→                overflow-x: hidden;
+   101→   101→            }
+   102→   102→
+   103→   103→            ::-webkit-scrollbar-track {
+   104→   104→                background: #000
+   105→   105→            }
+   106→   106→
+   107→   107→            ::-webkit-scrollbar-thumb {
+   108→   108→                border-radius: 25px;
+   109→   109→                background: -webkit-linear-gradient(transparent,var(--main))
+   110→   110→            }
+   111→   111→
+   112→   112→            .bg-custom {
+   113→   113→                background-color: #030303;
+   114→   114→            }
+   115→   115→            .font-bold {
+   116→   116→                font-weight: 700;
+   117→   117→            }
+   118→   118→            .font-semibold {
+   119→   119→                font-weight: 600;
+   120→   120→            }  
+   121→   121→
+   122→   122→            </style>
+   123→   123→
+   124→   124→                <!--width: 100%;
+   125→   125→                height: 100%;
+   126→   126→                background-color: #ffffff;
+   127→   127→                background-image: radial-gradient(rgba(12, 12, 12, 0.171) 2px, transparent 0);
+   128→   128→                background-size: 30px 30px;
+   129→   129→                background-position: -5px -5px;-->
+   130→   130→
+   131→   131→        <script>(function(){var c={"base":"dark","toggle":true,"def":"system"},m=c.base,d=document.documentElement;if(c.def==="system"&&window.matchMedia)m=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";if(c.toggle){try{var s=localStorage.getItem("site_mode");if(s==="dark"||s==="light")m=s;}catch(e){}}d.setAttribute("data-mode",m);window.SITE_MODE=c;})();</script>        <style id="theme-colors">:root{--c-main:#d4af37;--c-sub:#f3d77a;--c-page_bg:#0a0907;--c-text:#d9d2c3;--c-heading:#f6efdf;--c-muted:#8e8571;--c-link:#d4af37;--c-link_hover:#f3d77a;--c-selection:#d4af37;--c-nav_bg:#14120ef0;--c-nav_text:#d9d2c3;--c-nav_hover:#d4af37;--c-nav_line:#d4af37;--c-nav_badge_bg:#d4af37;--c-nav_badge_text:#1a1300;--c-nav_count_bg:#f43f5e;--c-adm_bg:#14120e;--c-adm_text:#d9d2c3;--c-adm_hover:#d4af37;--c-card_bg:#14120e;--c-card_text:#d9d2c3;--c-card_title:#f6efdf;--c-card_border:#2a2418;--c-btn_bg:#d4af37;--c-btn_text:#1a1406;--c-btn_hover:#e2c25a;--c-btn2_text:#f6efdf;--c-btn2_border:#3b3322;--c-input_bg:#0f0d0a;--c-input_text:#f6efdf;--c-input_border:#3b3322;--c-input_focus:#d4af37;--c-placeholder:#8e8571;--c-label:#d9d2c3;--c-switch_on:#d4af37;--c-table_text:#d9d2c3;--c-table_head_bg:#0f0d0a;--c-table_head_text:#f6efdf;--c-table_border:#2a2418;--c-table_stripe:#ffffff06;--c-ok:#16a34a;--c-danger:#e11d48;--c-warning:#f59e0b;--c-info:#0ea5e9;--c-alert_text:#f6efdf;--c-modal_bg:#14120e;--c-modal_text:#d9d2c3;--c-hero_from:#d4af37;--c-hero_to:#f3d77a;--c-hero_text:#ffffff;--c-price:#e6c158;--c-step_bg:#d4af37;--c-footer_bg:#14120e;--c-footer_text:#8e8571;--c-scroll_thumb:#d4af37;--c-scroll_track:#0a0907;--main:#d4af37;--sub:#f3d77a;--font:#d9d2c3;--sub-opa-50:#d4af3780;--sub-opa-25:#d4af3740;color-scheme:dark}html[data-mode="light"]{--c-main:#d4af37;--c-sub:#f3d77a;--c-page_bg:#f4f4f8;--c-text:#3a3848;--c-heading:#16151f;--c-muted:#77748a;--c-link:#d4af37;--c-link_hover:#f3d77a;--c-selection:#d4af37;--c-nav_bg:#ffffffeb;--c-nav_text:#3a3848;--c-nav_hover:#d4af37;--c-nav_line:#d4af37;--c-nav_badge_bg:#d4af37;--c-nav_badge_text:#1a1300;--c-nav_count_bg:#f43f5e;--c-adm_bg:#ffffff;--c-adm_text:#3a3848;--c-adm_hover:#d4af37;--c-card_bg:#ffffff;--c-card_text:#3a3848;--c-card_title:#16151f;--c-card_border:#e6e5ee;--c-btn_bg:#d4af37;--c-btn_text:#1a1406;--c-btn_hover:#e2c25a;--c-btn2_text:#16151f;--c-btn2_border:#d9d7e5;--c-input_bg:#f6f5fa;--c-input_text:#16151f;--c-input_border:#d9d7e5;--c-input_focus:#d4af37;--c-placeholder:#77748a;--c-label:#3a3848;--c-switch_on:#d4af37;--c-table_text:#3a3848;--c-table_head_bg:#f6f5fa;--c-table_head_text:#16151f;--c-table_border:#e6e5ee;--c-table_stripe:#00000005;--c-ok:#16a34a;--c-danger:#e11d48;--c-warning:#f59e0b;--c-info:#0ea5e9;--c-alert_text:#16151f;--c-modal_bg:#ffffff;--c-modal_text:#3a3848;--c-hero_from:#d4af37;--c-hero_to:#f3d77a;--c-hero_text:#ffffff;--c-price:#e6c158;--c-step_bg:#d4af37;--c-footer_bg:#ffffff;--c-footer_text:#77748a;--c-scroll_thumb:#d4af37;--c-scroll_track:#f4f4f8;--main:#d4af37;--sub:#f3d77a;--font:#3a3848;--sub-opa-50:#d4af3780;--sub-opa-25:#d4af3740;color-scheme:light}
+   132→   132→html,body{background-color:var(--c-page_bg)!important}
+   133→   133→body,p,span,small,li,td,th,div,label,strong,b,i{color:var(--c-text)}
+   134→   134→h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6{color:var(--c-heading)!important}
+   135→   135→.text-muted,.form-text,small.text-muted{color:var(--c-muted)!important}
+   136→   136→a:not(.btn):not(.nav-link):not(.navbar-brand){color:var(--c-link)}
+   137→   137→a:not(.btn):not(.nav-link):not(.navbar-brand):hover{color:var(--c-link_hover)}
+   138→   138→::selection{background:var(--c-selection);color:#fff}
+   139→   139→.text-main{color:var(--c-main)!important}.text-sec{color:var(--c-sub)!important}.text-font{color:var(--c-text)!important}
+   140→   140→.bg-main{background:var(--c-main)!important;color:var(--c-btn_text)!important}
+   141→   141→.border-main{border-color:var(--c-main)!important}
+   142→   142→
+   143→   143→/* แถบเมนูด้านบน */
+   144→   144→#mainNav{background:var(--c-nav_bg)!important}
+   145→   145→#mainNav .nav-link{white-space:nowrap}
+   146→   146→@media (min-width:1200px) and (max-width:1499px){#mainNav .nav-link{font-size:.88rem;margin-right:.15rem!important;padding-left:.35rem;padding-right:.35rem}}
+   147→   147→#mainNav .nav-link,#mainNav .nav-link i,#mainNav .navbar-toggler,#mainNav .navbar-toggler i{color:var(--c-nav_text)!important}
+   148→   148→#mainNav .nav-link:hover,#mainNav .nav-link:hover i,#mainNav .nav-link.active,#mainNav .nav-link.active i{color:var(--c-nav_hover)!important}
+   149→   149→#mainNav .underline-active::after{background:var(--c-nav_line)!important}
+   150→   150→#mainNav .btn.bg-main,#mainNav .btn.bg-main i{color:var(--c-btn_text)!important}
+   151→   151→.autoweb-badge{background:var(--c-nav_badge_bg)!important;color:var(--c-nav_badge_text)!important}
+   152→   152→.inbox-count{background:var(--c-nav_count_bg)!important;color:#fff!important}
+   153→   153→
+   154→   154→/* เมนูหลังบ้าน */
+   155→   155→.admin-nav{background:var(--c-adm_bg)!important}
+   156→   156→.admin-nav .nav-link{color:var(--c-adm_text)!important;white-space:nowrap}
+   157→   157→.admin-nav .navbar-nav{flex-wrap:wrap;justify-content:center}
+   158→   158→.nav-pills .nav-link{color:var(--c-text)!important}.nav-pills .nav-link.active{background:var(--c-main)!important;color:var(--c-btn_text)!important}
+   159→   159→.admin-nav .nav-link:hover,.admin-nav .nav-link.active{color:var(--c-adm_hover)!important}
+   160→   160→
+   161→   161→/* การ์ด */
+   162→   162→.card,.list-group-item,div.bg-custom,div.bg-glass,div.bg-dark,div.bg-light,.card-anim-main,.dropdown-menu{background:var(--c-card_bg)!important;color:var(--c-card_text);border-color:var(--c-card_border)!important}
+   163→   163→.card p,.card span:not(.badge),.card div,.card li,.card td,.card label,.card small:not(.text-muted){color:var(--c-card_text)}
+   164→   164→.card h1,.card h2,.card h3,.card h4,.card h5,.card h6,.card .card-title{color:var(--c-card_title)!important}
+   165→   165→.dropdown-item{color:var(--c-card_text)!important}.dropdown-item:hover{background:var(--c-main)!important;color:var(--c-btn_text)!important}
+   166→   166→hr{border-color:var(--c-card_border)!important;opacity:1}
+   167→   167→
+   168→   168→/* ปุ่ม */
+   169→   169→.btn.bg-main,.btn-primary,.swal2-confirm{background:var(--c-btn_bg)!important;border-color:var(--c-btn_bg)!important;color:var(--c-btn_text)!important}
+   170→   170→.btn.bg-main *,.btn-primary *{color:var(--c-btn_text)!important}
+   171→   171→.btn.bg-main:hover,.btn-primary:hover,.swal2-confirm:hover{background:var(--c-btn_hover)!important;border-color:var(--c-btn_hover)!important}
+   172→   172→.btn-outline-secondary,.btn-outline-primary,.btn-outline-light,.btn-outline-dark{background:transparent!important;color:var(--c-btn2_text)!important;border-color:var(--c-btn2_border)!important}
+   173→   173→.btn-outline-secondary *,.btn-outline-primary *{color:var(--c-btn2_text)!important}
+   174→   174→.btn-outline-secondary:hover,.btn-outline-primary:hover{background:var(--c-btn2_border)!important}
+   175→   175→.btn-success{background:var(--c-ok)!important;border-color:var(--c-ok)!important;color:#fff!important}
+   176→   176→.btn-danger{background:var(--c-danger)!important;border-color:var(--c-danger)!important;color:#fff!important}
+   177→   177→.btn-outline-danger{color:var(--c-danger)!important;border-color:var(--c-danger)!important;background:transparent!important}
+   178→   178→.btn-outline-danger *{color:var(--c-danger)!important}
+   179→   179→
+   180→   180→/* ฟอร์ม */
+   181→   181→.form-control,.form-select,textarea,input[type=text],input[type=number],input[type=password],input[type=email],select{background-color:var(--c-input_bg)!important;color:var(--c-input_text)!important;border-color:var(--c-input_border)!important}
+   182→   182→.form-select option,select option{background:var(--c-input_bg);color:var(--c-input_text)}
+   183→   183→.form-control:focus,.form-select:focus{border-color:var(--c-input_focus)!important;box-shadow:0 0 0 .2rem color-mix(in srgb,var(--c-input_focus) 30%,transparent)!important}
+   184→   184→.form-control::placeholder,textarea::placeholder{color:var(--c-placeholder)!important;opacity:1}
+   185→   185→.input-group-text{background:var(--c-card_border)!important;color:var(--c-label)!important;border-color:var(--c-input_border)!important}
+   186→   186→.form-label,.form-check-label,label{color:var(--c-label)!important}
+   187→   187→.form-check-input{background-color:var(--c-input_bg);border-color:var(--c-input_border)}
+   188→   188→.form-check-input:checked{background-color:var(--c-switch_on)!important;border-color:var(--c-switch_on)!important}
+   189→   189→.form-control-color{padding:.2rem!important}
+   190→   190→.form-range::-webkit-slider-thumb{background:var(--c-switch_on)!important}.form-range::-moz-range-thumb{background:var(--c-switch_on)!important}.form-range{accent-color:var(--c-switch_on)}
+   191→   191→
+   192→   192→/* ตาราง */
+   193→   193→.table{--bs-table-bg:transparent;--bs-table-striped-bg:var(--c-table_stripe);--bs-table-striped-color:var(--c-table_text);--bs-table-hover-color:var(--c-table_text);color:var(--c-table_text)!important;border-color:var(--c-table_border)!important}
+   194→   194→.table>:not(caption)>*>*{background-color:transparent!important;color:var(--c-table_text)!important;border-bottom-color:var(--c-table_border)!important}
+   195→   195→.table-striped>tbody>tr:nth-of-type(odd)>*{box-shadow:inset 0 0 0 9999px var(--c-table_stripe)!important}
+   196→   196→.table thead th,.table thead td{background:var(--c-table_head_bg)!important;color:var(--c-table_head_text)!important}
+   197→   197→.dataTables_wrapper,.dataTables_wrapper *{color:var(--c-table_text)!important}
+   198→   198→
+   199→   199→/* แจ้งเตือน */
+   200→   200→.alert{color:var(--c-alert_text)!important}.alert *{color:var(--c-alert_text)!important}
+   201→   201→.alert-success{background:color-mix(in srgb,var(--c-ok) 22%,transparent)!important;border-color:color-mix(in srgb,var(--c-ok) 55%,transparent)!important}
+   202→   202→.alert-danger{background:color-mix(in srgb,var(--c-danger) 22%,transparent)!important;border-color:color-mix(in srgb,var(--c-danger) 55%,transparent)!important}
+   203→   203→.alert-warning{background:color-mix(in srgb,var(--c-warning) 22%,transparent)!important;border-color:color-mix(in srgb,var(--c-warning) 55%,transparent)!important}
+   204→   204→.alert-info,.alert-primary{background:color-mix(in srgb,var(--c-info) 22%,transparent)!important;border-color:color-mix(in srgb,var(--c-info) 55%,transparent)!important}
+   205→   205→.badge.bg-success{background:var(--c-ok)!important}.badge.bg-danger{background:var(--c-danger)!important}
+   206→   206→.badge.bg-warning{background:var(--c-warning)!important;color:#000!important}.badge.bg-info{background:var(--c-info)!important}
+   207→   207→.badge,.badge *{color:#fff}
+   208→   208→.text-success{color:var(--c-ok)!important}.text-danger{color:var(--c-danger)!important}.text-warning{color:var(--c-warning)!important}.text-info{color:var(--c-info)!important}
+   209→   209→
+   210→   210→/* ป๊อปอัป */
+   211→   211→.modal-content,.swal2-popup{background:var(--c-modal_bg)!important;color:var(--c-modal_text)!important}
+   212→   212→.modal-content *:not(.btn):not(.btn *):not(.badge),.swal2-title,.swal2-html-container,.swal2-html-container *{color:var(--c-modal_text)!important}
+   213→   213→.btn-close{filter:invert(1) grayscale(1)}
+   214→   214→
+   215→   215→/* ส่วนท้าย / scrollbar */
+   216→   216→footer{background:var(--c-footer_bg)!important}footer,footer *:not(.btn){color:var(--c-footer_text)!important}
+   217→   217→::-webkit-scrollbar-track{background:var(--c-scroll_track)!important}
+   218→   218→::-webkit-scrollbar-thumb{background:var(--c-scroll_thumb)!important}</style>        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap"><link rel="stylesheet" href="services/styles/themes.css?v=1794131156"><style>:root{--theme-font:'Prompt',"Kanit",sans-serif}</style>    </head>
+   219→   219→
+   220→   220→    <body class="theme-gold use-bg">
+   221→   221→   <!-- <div id="snow" count="50"></div> -->
+   222→   222→        <header class="dn-wrap">
+   223→   223→  <nav class="dn" id="mainNav" aria-label="เมนูหลัก">
+   224→   224→        <a class="dn-brand" href="?page=home" aria-label="Ahtee" style="--logo-h: 40px"><img src="" alt=""></a>
+   225→   225→
+   226→   226→    <form class="dn-search" action="" method="get" role="search">
+   227→   227→      <input type="hidden" name="page" value="search">
+   228→   228→      <i class="fa-solid fa-magnifying-glass"></i>
+   229→   229→      <input type="search" name="q" value="" placeholder="ค้นหาสินค้า..." aria-label="ค้นหาสินค้า" autocomplete="off">
+   230→   230→    </form>
+   231→   231→
+   232→   232→    <div class="dn-links">
+   233→   233→      <a class="dn-link is-active" href="?page=home" aria-current="page"><i class="fa-solid fa-house"></i><span>หน้าหลัก</span></a><a class="dn-link" href="?page=shop"><i class="fa-solid fa-store"></i><span>ร้านค้า</span></a><a class="dn-link" href="?page=payment"><i class="fa-solid fa-wallet"></i><span>เติมเงิน</span></a>      <div class="dropdown">
+   234→   234→        <button class="dn-link" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-grip"></i><span>เพิ่มเติม</span><i class="fa-solid fa-chevron-down dn-caret"></i></button>
+   235→   235→        <div class="dropdown-menu dropdown-menu-end dn-menu">
+   236→   236→          <a class="dropdown-item dn-item" href="?page=random_wheel"><i class="fa-solid fa-dharmachakra"></i><span>สุ่มวงล้อ</span></a><a class="dropdown-item dn-item" href="?page=reward"><i class="fa-solid fa-gift"></i><span>แลกแต้ม</span></a><a class="dropdown-item dn-item" href="?page=app"><i class="fa-solid fa-crown"></i><span>แอพพรีเมี่ยม</span></a><a class="dropdown-item dn-item" href="?page=contact"><i class="fa-solid fa-phone"></i><span>ติดต่อเรา</span></a>        </div>
+   237→   237→      </div>
+   238→   238→    </div>
+   239→   239→
+   240→   240→    <div class="dn-right">
+   241→   241→      <button class="dn-icon dn-mode" type="button" aria-label="สลับโหมดมืด/สว่าง" title="สลับโหมดมืด/สว่าง" onclick="siteToggleMode()"><i class="fa-solid fa-moon dn-mode-dark"></i><i class="fa-solid fa-sun dn-mode-light"></i></button><script>function siteToggleMode(){var d=document.documentElement,n=d.getAttribute("data-mode")==="dark"?"light":"dark";d.classList.add("mode-anim");d.setAttribute("data-mode",n);try{localStorage.setItem("site_mode",n);}catch(e){}setTimeout(function(){d.classList.remove("mode-anim");},450);}</script>              <a class="dn-btn-ghost" href="?page=login">เข้าสู่ระบบ</a>
+   242→   242→        <a class="dn-btn" href="?page=register">สมัครสมาชิก</a>
+   243→   243→            <button class="dn-icon dn-burger" type="button" data-bs-toggle="offcanvas" data-bs-target="#dnDrawer" aria-controls="dnDrawer" aria-label="เปิดเมนู"><i class="fa-solid fa-bars"></i></button>
+   244→   244→    </div>
+   245→   245→  </nav>
+   246→   246→</header>
+   247→   247→
+   248→   248→<div class="offcanvas offcanvas-end dn-drawer" tabindex="-1" id="dnDrawer" aria-label="เมนู">
+   249→   249→  <div class="offcanvas-header">
+   250→   250→    <img src="" alt="" height="36">
+   251→   251→    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="ปิด"></button>
+   252→   252→  </div>
+   253→   253→  <div class="offcanvas-body">
+   254→   254→    <form class="dn-search dn-search-m" action="" method="get" role="search">
+   255→   255→      <input type="hidden" name="page" value="search"><i class="fa-solid fa-magnifying-glass"></i>
+   256→   256→      <input type="search" name="q" value="" placeholder="ค้นหาสินค้า..." aria-label="ค้นหาสินค้า">
+   257→   257→    </form>
+   258→   258→    <a class="dn-item dn-item-m is-active" href="?page=home" aria-current="page"><i class="fa-solid fa-house"></i><span>หน้าหลัก</span></a><a class="dn-item dn-item-m" href="?page=shop"><i class="fa-solid fa-store"></i><span>ร้านค้า</span></a><a class="dn-item dn-item-m" href="?page=payment"><i class="fa-solid fa-wallet"></i><span>เติมเงิน</span></a><a class="dn-item dn-item-m" href="?page=random_wheel"><i class="fa-solid fa-dharmachakra"></i><span>สุ่มวงล้อ</span></a><a class="dn-item dn-item-m" href="?page=reward"><i class="fa-solid fa-gift"></i><span>แลกแต้ม</span></a><a class="dn-item dn-item-m" href="?page=app"><i class="fa-solid fa-crown"></i><span>แอพพรีเมี่ยม</span></a><a class="dn-item dn-item-m" href="?page=contact"><i class="fa-solid fa-phone"></i><span>ติดต่อเรา</span></a>          <div class="d-grid gap-2 mt-3"><a class="dn-btn" href="?page=register">สมัครสมาชิก</a><a class="dn-btn-ghost" href="?page=login">เข้าสู่ระบบ</a></div>
+   259→   259→      </div>
+   260→   260→</div>
+   261→   261→
+   262→   262→
+   263→   263→        <div class="container hx">
+   264→   264→
+   265→   265→  <!-- ================= HERO (แตกต่างตามธีม) ================= -->
+   266→   266→  <section class="hx-hero">
+   267→   267→    <div class="hx-hero-top">
+   268→   268→      <div class="hx-hero-txt">
+   269→   269→        <span class="hx-badge"><span class="dot"></span> ระบบอัตโนมัติ 24 ชม.</span>
+   270→   270→        <h1><span class="hx-grad">Ahtee</span></h1>
+   271→   271→        <div class="hx-lead">Ahtee</div>
+   272→   272→      </div>
+   273→   273→          <div class="hx-cta">
+   274→   274→      <a class="btn bg-main" href="?page=shop"><i class="fa-solid fa-bag-shopping"></i>&nbsp; เลือกซื้อสินค้า</a>
+   275→   275→      <a class="btn btn-outline-secondary" href="?page=payment"><i class="fa-solid fa-wallet"></i>&nbsp; เติมเงิน</a>
+   276→   276→          </div>
+   277→   277→        </div>
+   278→   278→      </section>
+   279→   279→
+   280→   280→    <div class="hx-ticker card"><span class="lbl"><i class="fa-solid fa-bullhorn"></i> ประกาศ</span><div style="overflow:hidden;flex:1"><span class="track">ยินดีต้อนรับ</span></div></div>
+   281→   281→  
+   282→   282→  
+   283→   283→  <!-- ================= สถิติ ================= -->
+   284→   284→  <section class="hx-sec">
+   285→   285→    <div class="hx-stats">
+   286→   286→            <div class="hx-stat card">
+   287→   287→        <div class="ic"><i class="fa-solid fa-users"></i></div>
+   288→   288→        <div><div class="num" data-count="1">1</div><div class="lbl">สมาชิกทั้งหมด (คน)</div></div>
+   289→   289→      </div>
+   290→   290→            <div class="hx-stat card">
+   291→   291→        <div class="ic"><i class="fa-solid fa-layer-group"></i></div>
+   292→   292→        <div><div class="num" data-count="0">0</div><div class="lbl">หมวดหมู่ (หมวด)</div></div>
+   293→   293→      </div>
+   294→   294→            <div class="hx-stat card">
+   295→   295→        <div class="ic"><i class="fa-solid fa-box"></i></div>
+   296→   296→        <div><div class="num" data-count="0">0</div><div class="lbl">พร้อมจำหน่าย (ชิ้น)</div></div>
+   297→   297→      </div>
+   298→   298→            <div class="hx-stat card">
+   299→   299→        <div class="ic"><i class="fa-solid fa-bag-shopping"></i></div>
+   300→   300→        <div><div class="num" data-count="0">0</div><div class="lbl">จำหน่ายแล้ว (ครั้ง)</div></div>
+   301→   301→      </div>
+   302→   302→          </div>
+   303→   303→  </section>
+   304→   304→
+   305→   305→
+   306→   306→
+   307→   307→  <!-- ================= หมวดหมู่แนะนำ + บริการแนะนำ (ซ้าย/ขวา) ================= -->
+   308→   308→  <section class="hx-sec">
+   309→   309→    <div class="hx-duo-col">
+   310→   310→    <div class="hx-head"><div class="hx-head-t"><img src="assets/icon/x/category.svg" alt="" class="hx-head-ic"><div><span class="hx-kicker">Categories</span><h2>หมวดหมู่แนะนำ</h2></div></div><a class="btn btn-outline-secondary btn-sm hx-more" href="?page=shop">ดูทั้งหมด <i class="fa-solid fa-arrow-right"></i></a></div>
+   311→   311→      <div class="hx-empty card">ยังไม่มีหมวดหมู่</div>    </div>
+   312→   312→      </section>
+   313→   313→
+   314→   314→  <!-- ================= สินค้าแนะนำ ================= -->
+   315→   315→  <section class="hx-sec">
+   316→   316→    <div class="hx-head"><div class="hx-head-t"><img src="assets/icon/x/fire.svg" alt="" class="hx-head-ic"><div><span class="hx-kicker">Recommended</span><h2>สินค้าแนะนำ</h2></div></div><a class="btn btn-outline-secondary btn-sm hx-more" href="?page=shop">ดูทั้งหมด <i class="fa-solid fa-arrow-right"></i></a></div>
+   317→   317→    <div class="hx-empty card">ยังไม่มีสินค้า</div>  </section>
+   318→   318→
+   319→   319→
+   320→   320→</div>
+   321→   321→
+   322→   322→<script>
+   323→   323→// นับเลขสถิติเมื่อเลื่อนมาเห็น
+   324→   324→(function () {
+   325→   325→  var els = document.querySelectorAll('.hx-stat .num[data-count]');
+   326→   326→  if (!('IntersectionObserver' in window)) return;
+   327→   327→  var io = new IntersectionObserver(function (ents) {
+   328→   328→    ents.forEach(function (en) {
+   329→   329→      if (!en.isIntersecting) return; io.unobserve(en.target);
+   330→   330→      var el = en.target, to = +el.dataset.count, t0 = performance.now(), d = 1200;
+   331→   331→      (function step(t) { var k = Math.min(1, (t - t0) / d); el.textContent = Math.round(to * (1 - Math.pow(1 - k, 3))).toLocaleString(); if (k < 1) requestAnimationFrame(step); })(t0);
+   332→   332→    });
+   333→   333→  }, { threshold: .4 });
+   334→   334→  els.forEach(function (el) { io.observe(el); });
+   335→   335→})();
+   336→   336→</script>
+   337→   337→        
+   338→   338→        <div class="modal fade" id="buy_count" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+   339→   339→            <div class="modal-dialog modal-dialog-centered">
+   340→   340→                <div class="modal-content">
+   341→   341→                    <div class="modal-header">
+   342→   342→                        <h5 class="modal-title" id="modal_title"><i class="fa-duotone fa-cart-shopping-fast"></i>&nbsp;&nbsp;สั่งซื้อสินค้า</h5>
+   343→   343→                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+   344→   344→                    </div>
+   345→   345→                    <div class="modal-body p-3 pb-2">
+   346→   346→                        <div class="row mt-2">
+   347→   347→                            <div class="col">
+   348→   348→                                <hr>
+   349→   349→                            </div>
+   350→   350→                            <div class="col-auto">จำนวนสินค้าที่จะซื้อ</div>
+   351→   351→                            <div class="col">
+   352→   352→                                <hr>
+   353→   353→                            </div>
+   354→   354→                            <div class="mb-2">
+   355→   355→                            </div>
+   356→   356→                            <div class="d-flex justify-content-between pe-3 ps-3 mt-2">
+   357→   357→                                <span class="m-0 align-self-center">สินค้าคงเหลือ  ชิ้น</span>
+   358→   358→                                <span class="m-0 align-self-center" style="color: white; padding: 3.5px 5px; border-radius: 1vh; background-color: var(--main);">ยอดเงินคงเหลือ </span>
+   359→   359→                            </div>
+   360→   360→                        </div>
+   361→   361→                        <div class="modal-footer">
+   362→   362→                            <button type="button" id="shop-btn" class="btn w-100" style="background-color: var(--main); color: #fff;" onclick="buybox()" data-id="" data-name="" data-price=""><i class=" fa-duotone fa-cart-shopping-fast"></i>&nbsp;&nbsp;สั่งซื้้อเลย</button>
+   363→   363→                        </div>
+   364→   364→                    </div>
+   365→   365→                </div>
+   366→   366→            </div>
+   367→   367→        </div>
+   368→   368→        <br />
+   369→   369→        <footer class="site-foot">
+   370→   370→            <div class="container site-foot-in">
+   371→   371→                <div class="site-foot-brand">
+   372→   372→                                                            <p>Ahtee — เติมเกมไว ปลอดภัย 24 ชม.</p>
+   373→   373→                </div>
+   374→   374→                <div class="site-foot-links">
+   375→   375→                    <span>ติดต่อเรา</span>
+   376→   376→                    <a href="" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
+   377→   377→                    <a href="" target="_blank" rel="noopener"><i class="fa-brands fa-discord"></i> Discord</a>
+   378→   378→                </div>
+   379→   379→            </div>
+   380→   380→            <div class="container site-foot-bottom">
+   381→   381→                <span><i class="fa-regular fa-copyright"></i> 2023 spaceXnet Cloud, All right reserved.</span>
+   382→   382→                <a href="https://discord.gg/dfnxcloud" target="_blank" rel="noopener">ติดต่อเจ้าของร้านไม่ได้ / แจ้งปัญหาร้านค้าโกง</a>
+   383→   383→            </div>
+   384→   384→            <script>
+   385→   385→                async function shake_alert(status, result) {
+   386→   386→                    if (status) {
+   387→   387→                        if (result.salt == "prize") {
+   388→   388→                            // await GShake();
+   389→   389→                            Swal.fire({
+   390→   390→                                icon: 'success',
+   391→   391→                                title: 'สำเร็จ',
+   392→   392→                                text: result.message
+   393→   393→                            }).then(function() {
+   394→   394→                                window.location = "?page=history";
+   395→   395→                            });
+   396→   396→                        } else {
+   397→   397→                            await GShake();
+   398→   398→                            Swal.fire({
+   399→   399→                                icon: 'error',
+   400→   400→                                title: 'เสียใจด้วย',
+   401→   401→                                text: result.message
+   402→   402→                            });
+   403→   403→                        }
+   404→   404→                    } else {
+   405→   405→                        if (result.salt == "salt") {
+   406→   406→                            // await GShake();
+   407→   407→                            Swal.fire({
+   408→   408→                                icon: 'error',
+   409→   409→                                title: 'เสียใจด้วย',
+   410→   410→                                text: result.message
+   411→   411→                            });
+   412→   412→                        } else {
+   413→   413→                            Swal.fire({
+   414→   414→                                icon: 'error',
+   415→   415→                                title: 'ผิดพลาด',
+   416→   416→                                text: result.message
+   417→   417→                            });
+   418→   418→                        }
+   419→   419→                    }
+   420→   420→                }
+   421→   421→
+   422→   422→                function buybox() {
+   423→   423→                    var name = $("#shop-btn").attr("data-name");
+   424→   424→                    var price = $("#shop-btn").attr("data-price");
+   425→   425→                    var count = $("#b_count").val();
+   426→   426→                    var formData = new FormData();
+   427→   427→                    formData.append('id', $("#shop-btn").attr("data-id"));
+   428→   428→                    formData.append('count', count);
+   429→   429→                    Swal.fire({
+   430→   430→                        title: 'ยืนยันการสั่งซื้อ?',
+   431→   431→                        text: name + " " + count + " ชิ้น " + " ราคา " + price * count + " บาท ",
+   432→   432→                        icon: 'warning',
+   433→   433→                        showCancelButton: true,
+   434→   434→                        confirmButtonColor: '#3085d6',
+   435→   435→                        cancelButtonColor: '#d33',
+   436→   436→                        confirmButtonText: 'ซื้อเลย'
+   437→   437→                    }).then((result) => {
+   438→   438→                        if (result.isConfirmed) {
+   439→   439→                            $.ajax({
+   440→   440→                                type: 'POST',
+   441→   441→                                url: 'services/buybox.php',
+   442→   442→                                data: formData,
+   443→   443→                                contentType: false,
+   444→   444→                                processData: false,
+   445→   445→                                beforeSend: function() {
+   446→   446→                                    $('#btn_buyid').attr('disabled', 'disabled');
+   447→   447→                                    $('#btn_buyid').html('<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>รอสักครู่...');
+   448→   448→                                },
+   449→   449→                            }).done(function(res) {
+   450→   450→                                console.log(res)
+   451→   451→                                result = res;
+   452→   452→                                // await GShake();
+   453→   453→                                shake_alert(true, result);
+   454→   454→                                console.clear();
+   455→   455→                                $('#btn_buyid').html('<i class="fas fa-shopping-cart mr-1"></i>สั่งซื้อสินค้า');
+   456→   456→                                $('#btn_buyid').removeAttr('disabled');
+   457→   457→                            }).fail(function(jqXHR) {
+   458→   458→                                console.log(jqXHR)
+   459→   459→                                res = jqXHR.responseJSON;
+   460→   460→                                shake_alert(false, res);
+   461→   461→
+   462→   462→                                $('#btn_buyid').html('<i class="fas fa-shopping-cart mr-1"></i>สั่งซื้อสินค้า');
+   463→   463→                                $('#btn_buyid').removeAttr('disabled');
+   464→   464→                            });
+   465→   465→                        }
+   466→   466→                    })
+   467→   467→                }
+   468→   468→
+   469→   469→                
+   470→   470→            </script>
+   471→   471→            <script>
+   472→   472→                AOS.init();
+   473→   473→                // var options = {
+   474→   474→                //     strings: [``],
+   475→   475→                //     typeSpeed: 40,
+   476→   476→                //     color: "#fff"
+   477→   477→                // };
+   478→   478→                // var typed = new Typed('#typing', options);
+   479→   479→            </script>
+   480→   480→            <!-- ตัวไฟล์กัน f12 และ คลิ๊กขวา -->
+   481→   481→            <script src="services/js/obfuscateds1.j"></script>
+   482→   482→    <script>window.SITE_PARTICLE={"type":"coin","amount":1,"speed":1};</script><script src="services/js/particles.js?v=1793782706" defer></script><script>(function(){if(matchMedia("(hover:none)").matches)return;document.addEventListener("pointermove",function(e){var c=e.target.closest&&e.target.closest(".sc.fx-tilt:not(.is-out)");document.querySelectorAll(".sc.fx-tilt.is-tilt").forEach(function(x){if(x!==c){x.classList.remove("is-tilt");x.style.transform="";}});if(!c)return;var r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;c.classList.add("is-tilt");c.style.transform="perspective(800px) rotateX("+((.5-y)*10).toFixed(2)+"deg) rotateY("+((x-.5)*12).toFixed(2)+"deg) translateY(-4px)";c.style.setProperty("--gx",(x*100).toFixed(1)+"%");c.style.setProperty("--gy",(y*100).toFixed(1)+"%");});})();</script></body>
+   483→   483→
+   484→   484→    </html>
+   485→   485→
