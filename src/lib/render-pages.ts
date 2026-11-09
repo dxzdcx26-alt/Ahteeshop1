@@ -7,9 +7,49 @@ function thDate(d: Date): string {
   return d.toLocaleDateString("th-TH", { day: "2-digit", month: "2-digit", year: "numeric" }) + " " + d.toLocaleTimeString("th-TH", { hour: "2-digit", minute: "2-digit" });
 }
 
+const AUTH_PAGE_STYLE = `<style>
+.auth-page { min-height: calc(100vh - 170px); display: grid; place-items: center; padding: 28px 12px 48px; }
+.auth-shell { display: grid; grid-template-columns: minmax(250px, .88fr) minmax(0, 1.12fr); width: min(940px, 100%); overflow: hidden; border: 1px solid color-mix(in srgb, var(--c-main) 28%, var(--c-card_border)); border-radius: 18px; background: var(--c-card_bg); box-shadow: 0 24px 64px -42px rgba(0, 0, 0, .7); }
+.auth-aside { display: flex; flex-direction: column; justify-content: space-between; gap: 48px; padding: clamp(24px, 4vw, 42px); border-right: 1px solid var(--c-card_border); background: radial-gradient(ellipse at 20% 5%, color-mix(in srgb, var(--c-main) 24%, transparent), transparent 60%), var(--c-card_bg); }
+.auth-brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.auth-brand-mark { display: grid; width: 44px; height: 44px; flex: 0 0 44px; place-items: center; border: 1px solid color-mix(in srgb, var(--c-main) 40%, transparent); border-radius: 13px; background: color-mix(in srgb, var(--c-main) 16%, var(--c-card_bg)); color: var(--c-main) !important; font-size: 1.1rem; }
+.auth-brand-name { color: var(--c-card_title) !important; font-size: 1rem; font-weight: 700; overflow-wrap: anywhere; }
+.auth-aside-copy { max-width: 340px; }
+.auth-eyebrow { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 12px; color: var(--c-main) !important; font-size: .75rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.auth-eyebrow::before { width: 18px; height: 2px; content: ""; border-radius: 2px; background: var(--c-main); }
+.auth-aside-copy h1 { margin: 0 0 10px; color: var(--c-card_title) !important; font-size: clamp(1.7rem, 3vw, 2.2rem); font-weight: 700; line-height: 1.25; }
+.auth-aside-copy p { margin: 0; color: var(--c-muted) !important; line-height: 1.7; }
+.auth-aside-foot { color: var(--c-muted) !important; font-size: .8rem; }
+.auth-form-panel { min-width: 0; padding: clamp(24px, 5vw, 48px); }
+.auth-form-head { margin-bottom: 26px; }
+.auth-form-head h2 { margin: 0 0 6px; color: var(--c-card_title) !important; font-size: 1.45rem; font-weight: 700; }
+.auth-form-head p { margin: 0; color: var(--c-muted) !important; font-size: .92rem; }
+.auth-fields { display: grid; gap: 17px; }
+.auth-field { min-width: 0; }
+.auth-field label { display: block; margin-bottom: 7px; color: var(--c-label) !important; font-size: .88rem; font-weight: 600; }
+.auth-field input { width: 100%; height: 48px; padding: 0 14px; border: 1px solid var(--c-input_border); border-radius: 10px; outline: none; background: var(--c-input_bg); color: var(--c-input_text); font: inherit; transition: border-color .16s ease, box-shadow .16s ease; }
+.auth-field input::placeholder { color: var(--c-placeholder); }
+.auth-field input:focus { border-color: var(--c-main); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-main) 18%, transparent); }
+.auth-captcha { min-height: 0; overflow-x: auto; }
+.auth-submit { width: 100%; min-height: 48px; margin-top: 2px; border: 0; border-radius: 10px; background: var(--c-btn_bg); color: var(--c-btn_text) !important; font: inherit; font-weight: 700; cursor: pointer; transition: background .16s ease, transform .16s ease; }
+.auth-submit:hover { background: var(--c-btn_hover); transform: translateY(-1px); }
+.auth-submit:disabled { opacity: .65; cursor: wait; transform: none; }
+.auth-switch { margin: 21px 0 0; color: var(--c-muted) !important; text-align: center; font-size: .9rem; }
+.auth-switch a { margin-left: 5px; color: var(--c-link) !important; font-weight: 700; }
+.auth-switch a:hover { color: var(--c-link_hover) !important; }
+@media (max-width: 640px) {
+    .auth-page { min-height: auto; padding: 12px 0 28px; }
+    .auth-shell { grid-template-columns: minmax(0, 1fr); border-radius: 14px; }
+    .auth-aside { gap: 20px; padding: 20px; border-right: 0; border-bottom: 1px solid var(--c-card_border); }
+    .auth-aside-copy h1 { font-size: 1.5rem; }
+    .auth-aside-foot { display: none; }
+    .auth-form-panel { padding: 22px 20px 24px; }
+}
+</style>`;
+
 // product / app card (exact markup from the original app catalog page)
 export function productCard(o: { id: string; name: string; img: string; price: number; stock: number; buyPage: string; buyLabel?: string; aos?: string }): string {
-  const aos = o.aos || ` data-aos="zoom-in" data-aos-duration="800"`;
+    const aos = o.aos || "";
   const href = `?page=${o.buyPage}&amp;id=${esc(o.id)}`;
   return `<div class="col-12 col-lg-3 mb-4 justify-content-center"${aos}>
                                 <div class="card-anim">
@@ -18,7 +58,7 @@ export function productCard(o: { id: string; name: string; img: string; price: n
                                             <a href="${href}">
                                                 <div class="view overlay">
                                                     <center>
-                                                        <img class="img-fluid " src="${esc(o.img)}" alt="${esc(o.name)}" style="border-radius: 1vh; width: 100%; max-width: 100vh;">
+                                                        <img class="img-fluid " src="${esc(o.img)}" alt="${esc(o.name)}" loading="lazy" decoding="async" style="border-radius: 1vh; width: 100%; max-width: 100vh;">
                                                     </center>
                                                     <a href="#!">
                                                         <div class="mask rgba-white-slight"></div>
@@ -48,8 +88,10 @@ export function productCard(o: { id: string; name: string; img: string; price: n
 export async function bodyHome(st: Record<string, string>, user: SessionUser | null): Promise<string> {
   const name = st.site_name || "AhteeShop";
   const lead = st.hero_lead || name;
-  const anns = await db.announcement.findMany({ where: { active: true } });
-  const track = esc(anns.map((a) => a.text).join(" • ") || "ยินดีต้อนรับ");
+    const anns = await db.announcement.findMany({ where: { active: true }, orderBy: { createdAt: "desc" } });
+    const announcementItems = anns.length
+        ? anns.map((announcement) => `<li class="hx-announcement-item"><span class="hx-announcement-dot" aria-hidden="true"></span><p>${esc(announcement.text)}</p></li>`).join("")
+        : `<li class="hx-announcement-item"><span class="hx-announcement-dot" aria-hidden="true"></span><p>ยินดีต้อนรับ</p></li>`;
   const [members, cats, products] = await Promise.all([
     db.user.count(),
     db.category.count({ where: { active: true } }),
@@ -71,30 +113,28 @@ export async function bodyHome(st: Record<string, string>, user: SessionUser | n
       </div>`;
   }
 
-  const catsList = await db.category.findMany({ where: { active: true }, orderBy: { sortOrder: "asc" }, take: 4 });
-  // สินค้าแนะนำหน้าแรก 8 ชิ้น: สินค้าร้านที่ตั้ง featured ก่อน แล้วเติมด้วยแอพพรีเมี่ยม (ของมีสต็อกก่อน)
-  const featProds = await db.product.findMany({ where: { active: true, featured: true }, orderBy: { createdAt: "desc" }, take: 8 });
-  const featApps = featProds.length < 8
-    ? await db.appProduct.findMany({ where: { active: true }, orderBy: [{ active: "desc" }, { extId: "asc" }], take: 8 - featProds.length })
-    : [];
-  const featCards: { id: string; name: string; img: string; price: number; stock: number; buyPage: string }[] = [
-    ...featProds.map((p) => ({ id: p.id, name: p.name, img: p.image || "assets/icon/x/category.svg", price: p.price, stock: 0, buyPage: "buy" })),
-    ...featApps.map((a) => ({ id: a.id, name: a.name, img: a.image || "assets/icon/x/category.svg", price: a.price, stock: a.stock, buyPage: "buyapp" })),
-  ];
-  let catsHtml: string;
-  if (catsList.length === 0) {
-    catsHtml = `<div class="hx-empty card">ยังไม่มีหมวดหมู่</div>`;
-  } else {
-    catsHtml = `<div class="row g-3">` + catsList.map((c) => productCard({ id: c.id, name: c.name, img: c.image || "assets/icon/x/category.svg", price: 0, stock: 0, buyPage: "cat", buyLabel: "เข้าชมหมวดนี้" }).replace(/<p class="text-main[\s\S]*?<\/p>/, "").replace(/<p class="text-white main-badge[\s\S]*?<\/p>/, "")).join("") + `</div>`;
-  }
-  let prodsHtml: string;
-  if (featCards.length === 0) {
-    prodsHtml = `<div class="hx-empty card">ยังไม่มีสินค้า</div>`;
-  } else {
-    const stocks = await Promise.all(featProds.map((p) => db.productItem.count({ where: { productId: p.id, sold: false } })));
-    featProds.forEach((_, i) => { featCards[i].stock = stocks[i]; });
-    prodsHtml = CARD_STYLE + `<div class="row g-3">` + featCards.map((c) => productCard(c)).join("") + `</div>`;
-  }
+    const [allCategories, storeProducts, appProducts, productStockGroups] = await Promise.all([
+        db.category.findMany({ where: { active: true }, orderBy: { sortOrder: "asc" }, take: 8 }),
+        db.product.findMany({ where: { active: true }, orderBy: { createdAt: "desc" } }),
+        db.appProduct.findMany({ where: { active: true }, orderBy: [{ active: "desc" }, { extId: "asc" }] }),
+        db.productItem.groupBy({ by: ["productId"], where: { sold: false }, _count: { _all: true } }),
+    ]);
+    const catsList = allCategories.filter((category) => !/rov/i.test(category.name)).slice(0, 4);
+    const stockByProduct = new Map(productStockGroups.map((group) => [group.productId, group._count._all]));
+    const homeCards: { id: string; name: string; img: string; price: number; stock: number; buyPage: string; createdAt: Date }[] = [
+        ...storeProducts
+            .filter((product) => !/diamonds\s*100/i.test(product.name))
+            .map((product) => ({ id: product.id, name: product.name, img: product.image || "assets/icon/x/category.svg", price: product.price, stock: stockByProduct.get(product.id) || 0, buyPage: "buy", createdAt: product.createdAt })),
+        ...appProducts
+            .filter((app) => !/diamonds\s*100/i.test(app.name))
+            .map((app) => ({ id: app.id, name: app.name, img: app.image || "assets/icon/x/category.svg", price: app.price, stock: app.stock, buyPage: "buyapp", createdAt: app.createdAt })),
+    ].sort((a, b) => Number(b.stock > 0) - Number(a.stock > 0) || b.stock - a.stock || b.createdAt.getTime() - a.createdAt.getTime());
+    const catsHtml = catsList.length
+        ? `<div class="row g-3">${catsList.map((category) => productCard({ id: category.id, name: category.name, img: category.image || "assets/icon/x/category.svg", price: 0, stock: 0, buyPage: "cat", buyLabel: "เข้าชมหมวดนี้" }).replace(/<p class="text-main[\s\S]*?<\/p>/, "").replace(/<p class="text-white main-badge[\s\S]*?<\/p>/, "")).join("")}</div>`
+        : `<div class="hx-empty card">ยังไม่มีหมวดหมู่</div>`;
+    const prodsHtml = homeCards.length > 0
+        ? CARD_STYLE + `<div class="row g-3 hx-product-grid">${homeCards.map((card) => productCard({ ...card, buyLabel: user ? "สั่งซื้อตอนนี้เลย" : "เข้าสู่ระบบเพื่อซื้อ" })).join("")}</div>`
+        : `<div class="hx-empty card">ยังไม่มีสินค้า</div>`;
 
   return `<div class="container hx">
 
@@ -113,46 +153,53 @@ export async function bodyHome(st: Record<string, string>, user: SessionUser | n
         </div>
       </section>
 
-    <div class="hx-ticker card"><span class="lbl"><i class="fa-solid fa-bullhorn"></i> ประกาศ</span><div style="overflow:hidden;flex:1"><span class="track">${track}</span></div></div>
+        <aside class="hx-announcement" aria-labelledby="hx-announcement-title">
+            <span class="hx-announcement-icon" aria-hidden="true"><i class="fa-solid fa-bullhorn"></i></span>
+            <div class="hx-announcement-body">
+                <div class="hx-announcement-heading"><strong id="hx-announcement-title">ประกาศร้าน</strong><span>ข่าวสารและข้อมูลสำคัญ</span></div>
+                <ul class="hx-announcement-list">${announcementItems}</ul>
+            </div>
+        </aside>
   
   
   <!-- ================= สถิติ ================= -->
   <section class="hx-sec">
     <div class="hx-stats">
             ${statsHtml}
-          </div>
-  </section>
+                    </div>
+    </section>
 
+    <section class="hx-sec">
+        <div class="hx-duo-col">
+            <div class="hx-head"><div class="hx-head-t"><img src="assets/icon/x/category.svg" alt="" class="hx-head-ic"><div><span class="hx-kicker">Categories</span><h2>หมวดหมู่แนะนำ</h2></div></div><a class="btn btn-outline-secondary btn-sm hx-more" href="?page=shop">ดูทั้งหมด <i class="fa-solid fa-arrow-right"></i></a></div>
+            ${catsHtml}
+        </div>
+    </section>
 
-
-  <!-- ================= หมวดหมู่แนะนำ + บริการแนะนำ (ซ้าย/ขวา) ================= -->
-  <section class="hx-sec">
-    <div class="hx-duo-col">
-    <div class="hx-head"><div class="hx-head-t"><img src="assets/icon/x/category.svg" alt="" class="hx-head-ic"><div><span class="hx-kicker">Categories</span><h2>หมวดหมู่แนะนำ</h2></div></div><a class="btn btn-outline-secondary btn-sm hx-more" href="?page=shop">ดูทั้งหมด <i class="fa-solid fa-arrow-right"></i></a></div>
-      ${catsHtml}    </div>
-      </section>
-
-  <!-- ================= สินค้าแนะนำ ================= -->
-  <section class="hx-sec">
-    <div class="hx-head"><div class="hx-head-t"><img src="assets/icon/x/fire.svg" alt="" class="hx-head-ic"><div><span class="hx-kicker">Recommended</span><h2>สินค้าแนะนำ</h2></div></div><a class="btn btn-outline-secondary btn-sm hx-more" href="?page=shop">ดูทั้งหมด <i class="fa-solid fa-arrow-right"></i></a></div>
-    ${prodsHtml}  </section>
-
+    <section class="hx-sec">
+        <div class="hx-head"><div class="hx-head-t"><img src="assets/icon/x/fire.svg" alt="" class="hx-head-ic"><div><span class="hx-kicker">Recommended</span><h2>สินค้าแนะนำ</h2></div></div><a class="btn btn-outline-secondary btn-sm hx-more" href="?page=shop">ดูทั้งหมด <i class="fa-solid fa-arrow-right"></i></a></div>
+        ${prodsHtml}
+    </section>
 
 </div>
 
 <script>
-// นับเลขสถิติเมื่อเลื่อนมาเห็น
 (function () {
-  var els = document.querySelectorAll('.hx-stat .num[data-count]');
-  if (!('IntersectionObserver' in window)) return;
-  var io = new IntersectionObserver(function (ents) {
-    ents.forEach(function (en) {
-      if (!en.isIntersecting) return; io.unobserve(en.target);
-      var el = en.target, to = +el.dataset.count, t0 = performance.now(), d = 1200;
-      (function step(t) { var k = Math.min(1, (t - t0) / d); el.textContent = Math.round(to * (1 - Math.pow(1 - k, 3))).toLocaleString(); if (k < 1) requestAnimationFrame(step); })(t0);
-    });
-  }, { threshold: .4 });
-  els.forEach(function (el) { io.observe(el); });
+    var els = document.querySelectorAll('.hx-stat .num[data-count]');
+    if (!('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function (ents) {
+        ents.forEach(function (en) {
+            if (!en.isIntersecting) return;
+            io.unobserve(en.target);
+            var el = en.target, to = +el.dataset.count, t0 = performance.now(), d = 1200;
+            (function step(t) {
+                var k = Math.min(1, (t - t0) / d);
+                el.textContent = Math.round(to * (1 - Math.pow(1 - k, 3))).toLocaleString();
+                if (k < 1) requestAnimationFrame(step);
+            })(t0);
+        });
+    }, { threshold: .4 });
+    els.forEach(function (el) { io.observe(el); });
 })();
 </script>
 `;
@@ -161,41 +208,25 @@ export async function bodyHome(st: Record<string, string>, user: SessionUser | n
 // ---------------- LOGIN ----------------
 export function bodyLogin(st: Record<string, string>): string {
   const name = st.site_name || "AhteeShop";
-  return `${PAGE_HEAD_STYLE}<div class="container-fluid p-4">
-    <div class="container-sm  m-cent ps-4 pe-4">
-        <center>
-            <div class="col-lg-6 m-auto bg-custom shadow-sm p-0 pb-3" style="border-radius: 0.5vh;">
-                <div class="col-10 col-lg-12 m-cent pt-4" style="margin-bottom: 4em!important; ">
-                    <center>
-                        <h1 class=" text-strongest mt-3" style="font-size: 48px; text-transform: uppercase;">${esc(name)}</h1>
-                        <h3 class=" text-strongest mb-3">เข้าสู่ระบบ</h3>
-                    </center>
-                    <div class="container-fluid ps-0 pe-0" style="margin-top: 1em;">
-
-                        <div class="col-lg-8 m-cent mt-2">
-
-                            <div class="mb-1 text-start">
-                                <label class="ms-1"> ชื่อผู้ใช้</label>
-                                <input type="text" id="user" class="form-control" placeholder="Username" aria-describedby="basic-addon1" style="border-radius: 0.5vh;">
-                            </div>
-                            <div class="mb-1 text-start">
-                                <label class="ms-1"> รหัสผ่าน</label>
-                                <input type="password" id="pass" class="form-control" placeholder="Password" aria-describedby="basic-addon1" style="border-radius: 0.5vh;">
-                            </div>
-                            <div class="mt-3">
-                                <div id="captcha" class="cf-turnstile" data-sitekey="0x4AAAAAAAHloNCBDFBETKy5" data-theme="light" data-callback="onloadTurnstileCallback"></div>
-                            </div>
-                            <br>
-                        <button class="btn bg-main   text-white  ps-4 pe-4  pt-2 pb-2 w-100 d-inline" id="btn_regis">&nbsp;เข้าสู่ระบบ</button>
-                            <br>
-                            <div class="pt-3 text-main">
-                                <span>ยังไม่มีบัญชี <a class="ms-1" href="?page=register">&nbsp;สมัครสมาชิกตอนนี้</a></span>
-                            </div>
-                </div>
+    return `${AUTH_PAGE_STYLE}<section class="auth-page">
+    <div class="auth-shell">
+        <aside class="auth-aside">
+            <div class="auth-brand"><span class="auth-brand-mark"><i class="fa-solid fa-bag-shopping"></i></span><span class="auth-brand-name">${esc(name)}</span></div>
+            <div class="auth-aside-copy"><span class="auth-eyebrow">สมาชิก AhteeShop</span><h1>ยินดีต้อนรับกลับ</h1><p>เข้าสู่ระบบเพื่อดูบัญชี สั่งซื้อสินค้า และติดตามรายการของคุณ</p></div>
+            <span class="auth-aside-foot">ซื้อขายสะดวก ปลอดภัย ตลอด 24 ชั่วโมง</span>
+        </aside>
+        <div class="auth-form-panel">
+            <div class="auth-form-head"><h2>เข้าสู่ระบบ</h2><p>กรอกชื่อผู้ใช้และรหัสผ่านเพื่อดำเนินการต่อ</p></div>
+            <div class="auth-fields">
+                <div class="auth-field"><label for="user">ชื่อผู้ใช้</label><input type="text" id="user" placeholder="ชื่อผู้ใช้ของคุณ" autocomplete="username"></div>
+                <div class="auth-field"><label for="pass">รหัสผ่าน</label><input type="password" id="pass" placeholder="รหัสผ่าน" autocomplete="current-password"></div>
+                <div class="auth-captcha"><div id="captcha" class="cf-turnstile" data-sitekey="0x4AAAAAAAHloNCBDFBETKy5" data-theme="light" data-callback="onloadTurnstileCallback"></div></div>
+                <button class="auth-submit" id="btn_regis" type="button">เข้าสู่ระบบ</button>
             </div>
+            <p class="auth-switch">ยังไม่มีบัญชี?<a href="?page=register">สมัครสมาชิก</a></p>
         </div>
     </div>
-</div>
+</section>
 <script type="text/javascript">
     $("#btn_regis").click(function(e) {
         e.preventDefault();
@@ -248,49 +279,26 @@ export function bodyLogin(st: Record<string, string>): string {
 // ---------------- REGISTER ----------------
 export function bodyRegister(st: Record<string, string>): string {
   const name = st.site_name || "AhteeShop";
-  return `${PAGE_HEAD_STYLE}<div class="container-fluid p-4">
-    <div class="container-sm m-cent ps-4 pe-4">
-        <center>
-            <div class="col-lg-6 m-auto bg-custom shadow-sm p-0 pb-3" style="border-radius: 0.5vh;">
-                <div class="col-10 col-lg-12 m-cent pt-4" style="margin-bottom: 4em!important; ">
-                    <center>
-                        <h1 class="text-strongest mt-3" style="font-size: 48px; text-transform: uppercase;">${esc(name)}</h1>
-                        <h3 class="text-strongest mb-3">สร้างบัญชี</h3>
-                    </center>
-                    <div class="container-fluid ps-0 pe-0" style="margin-top: 1em;">
-
-                        <div class="col-lg-8 m-cent mt-2">
-
-                            <div class="mb-1 text-start">
-                                <label class="ms-1"> ชื่อผู้ใช้</label>
-                                <input type="text" id="user" class="form-control" placeholder="Username" aria-describedby="basic-addon1" style="border-radius: 0.5vh;">
-                            </div>
-
-                            <div class="mb-1 text-start">
-                                <label class="ms-1"> รหัสผ่าน</label>
-                                <input type="password" id="pass" class="form-control" placeholder="Password" aria-describedby="basic-addon1" style="border-radius: 0.5vh;">
-                            </div>
-
-                            <div class="mb-3 text-start">
-                                <label class="ms-1"> รหัสผ่านอีกครั้ง</label>
-                                <input type="password" id="pass2" class="form-control" placeholder="Confirm password" aria-describedby="basic-addon1" style="border-radius: 0.5vh;">
-                            </div>
-                            <div class="mt-3">
-                                <div id="captcha" class="cf-turnstile" data-sitekey="0x4AAAAAAAHloNCBDFBETKy5" data-theme="light" data-callback="onloadTurnstileCallback"></div>
-                            </div>
-                            <br>
-                            <button class="btn bg-main   text-white  ps-4 pe-4  pt-2 pb-2 w-100 d-inline" id="btn_regis">&nbsp;สมัครสมาชิก</button>
-                            <br>
-                            <div class="pt-3 text-main">
-                                <span>มีบัญชีแล้ว? <a class="ms-1" href="?page=login">&nbsp;เข้าสู่ระบบตอนนี้</a></span>
-                            </div>
-                    </div>
-                </div>
-        </center>
+    return `${AUTH_PAGE_STYLE}<section class="auth-page">
+    <div class="auth-shell">
+        <aside class="auth-aside">
+            <div class="auth-brand"><span class="auth-brand-mark"><i class="fa-solid fa-bag-shopping"></i></span><span class="auth-brand-name">${esc(name)}</span></div>
+            <div class="auth-aside-copy"><span class="auth-eyebrow">สมัครสมาชิก</span><h1>เริ่มต้นใช้งาน</h1><p>สร้างบัญชีเพื่อสั่งซื้อสินค้าและจัดการรายการของคุณได้ในที่เดียว</p></div>
+            <span class="auth-aside-foot">สมัครง่าย ใช้งานได้ตลอด 24 ชั่วโมง</span>
+        </aside>
+        <div class="auth-form-panel">
+            <div class="auth-form-head"><h2>สร้างบัญชีใหม่</h2><p>กรอกข้อมูลให้ครบเพื่อสมัครสมาชิก</p></div>
+            <div class="auth-fields">
+                <div class="auth-field"><label for="user">ชื่อผู้ใช้</label><input type="text" id="user" placeholder="ตั้งชื่อผู้ใช้" autocomplete="username"></div>
+                <div class="auth-field"><label for="pass">รหัสผ่าน</label><input type="password" id="pass" placeholder="สร้างรหัสผ่าน" autocomplete="new-password"></div>
+                <div class="auth-field"><label for="pass2">ยืนยันรหัสผ่าน</label><input type="password" id="pass2" placeholder="กรอกรหัสผ่านอีกครั้ง" autocomplete="new-password"></div>
+                <div class="auth-captcha"><div id="captcha" class="cf-turnstile" data-sitekey="0x4AAAAAAAHloNCBDFBETKy5" data-theme="light" data-callback="onloadTurnstileCallback"></div></div>
+                <button class="auth-submit" id="btn_regis" type="button">สมัครสมาชิก</button>
+            </div>
+            <p class="auth-switch">มีบัญชีแล้ว?<a href="?page=login">เข้าสู่ระบบ</a></p>
+        </div>
     </div>
-</div>
-
-
+</section>
 <script type="text/javascript">
     $("#btn_regis").click(function(e) {
         e.preventDefault();
@@ -352,16 +360,14 @@ export async function bodyShop(st: Record<string, string>, user: SessionUser | n
   if (catId) {
     const cat = await db.category.findUnique({ where: { id: catId }, include: { products: { where: { active: true }, orderBy: { createdAt: "desc" } } } });
     if (!cat) return bodyShop(st, user, null);
-    let cards = "";
-    if (cat.products.length > 0) {
-      const rows = await Promise.all(
-        cat.products.map(async (p) => {
-          const stock = await db.productItem.count({ where: { productId: p.id, sold: false } });
-          return productCard({ id: p.id, name: p.name, img: p.image || "assets/icon/x/category.svg", price: p.price, stock, buyPage: "buy", buyLabel: "สั่งซื้อสินค้า", aos: ` data-aos="zoom-in"` });
-        })
-      );
-      cards = CARD_STYLE + `<div class="row justify-content-center justify-content-lg-start">` + rows.join("") + `</div>`;
-    }
+        const stockGroups = cat.products.length
+            ? await db.productItem.groupBy({ by: ["productId"], where: { productId: { in: cat.products.map((product) => product.id) }, sold: false }, _count: { _all: true } })
+            : [];
+        const stockByProduct = new Map(stockGroups.map((group) => [group.productId, group._count._all]));
+        const buyLabel = user ? "สั่งซื้อสินค้า" : "เข้าสู่ระบบเพื่อซื้อ";
+        const cards = cat.products.length
+            ? CARD_STYLE + `<div class="row g-3 hx-product-grid">${cat.products.map((product) => productCard({ id: product.id, name: product.name, img: product.image || "assets/icon/x/category.svg", price: product.price, stock: stockByProduct.get(product.id) || 0, buyPage: "buy", buyLabel })).join("")}</div>`
+            : `<div class="hx-empty card">ยังไม่มีสินค้าในหมวดนี้</div>`;
     return `${IMG_ANIM_STYLE}<div class="container-fluid p-0 ">
     <div class="container-sm m-cent p-0 pt-4 ">
         <div class="container-sm ">
@@ -378,7 +384,7 @@ export async function bodyShop(st: Record<string, string>, user: SessionUser | n
                         </div>
                     </center>
                     <hr>
-                    ${cat.products.length === 0 ? `<div class="row justify-content-center justify-content-lg-start"><h6 class=" text-center">ยังไม่มีสินค้าในหมวดนี้</h6></div>` : cards}
+                    ${cards}
                 </div>
             </div>
         </div>
@@ -386,49 +392,32 @@ export async function bodyShop(st: Record<string, string>, user: SessionUser | n
 </div>`;
   }
 
-  const cats = await db.category.findMany({ where: { active: true }, orderBy: { sortOrder: "asc" } });
-  let rows = "";
-  if (cats.length === 0) {
-    rows = `<h6 class=" text-center">ไม่มีหมวดหมู่ในตอนนี้</h6>`;
-  } else {
-    rows =
-      CARD_STYLE +
-      IMG_ANIM_STYLE +
-      `<div class="row justify-content-center justify-content-lg-start">` +
-      (
-        await Promise.all(
-          cats.map(async (c) => {
-            const n = await db.product.count({ where: { categoryId: c.id, active: true } });
-            return `<div class="col-6 col-md-4 col-lg-3 mb-4" data-aos="zoom-in">
-                    <div class="card-anim">
-                        <div class="card-anim-main bg-custom border-hov shadow-sm p-1" style="border-radius: 1vh; height: fit-content;">
-                            <div class="p-1">
-                                <a href="?page=shop&amp;cat=${esc(c.id)}">
-                                    <div class="img-anim">
-                                        <img src="${esc(c.image || "assets/icon/x/category.svg")}" alt="${esc(c.name)}">
-                                        <div class="bg"></div>
-                                        <div class="text">เข้าชม</div>
-                                    </div>
-                                    <div class="p-3 pt-3 pb-1">
-                                        <h5 class="text-strongest mb-1" style="word-wrap: break-word;">${esc(c.name)}</h5>
-                                        <div class="d-flex justify-content-between mb-2">
-                                            <p class="text-main align-self-center m-0 h6"><strong>${n} สินค้า</strong></p>
-                                        </div>
-                                        <center>
-                                            <a class="btn-main btn w-100 pd-sm-font mb-2 font-semibold" href="?page=shop&amp;cat=${esc(c.id)}" style="border-radius: 10px;">เข้าชมหมวดนี้</a>
-                                        </center>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>`;
-          })
-        )
-      ).join("") +
-      `</div>`;
-  }
-  return `<div class="container-fluid p-0 "> <div class="container-sm m-cent p-0 pt-4 "> <div class="container-sm "> <div class="container-fluid"> <div class="container-fluid" data-aos="zoom-in"> <center> <div class="col-12 col-lg-12 p-0 mb-2" style="border-radius: 1vh;"> <div class="d-flex justify-content-between"> <div class="text-center text-lg-start"> <h2 class=" mt-2 mb-0 font-semibold"><img src="assets/icon/x/category.svg" alt="" class="hx-ic" style="height:2.3rem;width:2.3rem;vertical-align:middle;margin:-.2rem .45rem 0 0"><b>หมวดหมู่ทั้งหมด</b></h2> </div> <a class="btn nav-link align-self-center bg-main mt-0" onclick="window.history.back()" style="height: fit-content;border-radius: 1vh;"><b style="color: #ffffff;">ย้อนกลับ</b></a> </div> </div> </center> <hr> <div class="row justify-content-center justify-content-lg-start"> ${rows} </div> </div> </div> </div> </div> </div>`;
+    const [categories, storeProducts, appProducts, stockGroups, categoryCounts] = await Promise.all([
+        db.category.findMany({ where: { active: true }, orderBy: { sortOrder: "asc" } }),
+        db.product.findMany({ where: { active: true }, orderBy: { createdAt: "desc" } }),
+        db.appProduct.findMany({ where: { active: true }, orderBy: [{ active: "desc" }, { extId: "asc" }] }),
+        db.productItem.groupBy({ by: ["productId"], where: { sold: false }, _count: { _all: true } }),
+        db.product.groupBy({ by: ["categoryId"], where: { active: true }, _count: { _all: true } }),
+    ]);
+    const stockByProduct = new Map(stockGroups.map((group) => [group.productId, group._count._all]));
+    const countByCategory = new Map(categoryCounts.map((group) => [group.categoryId, group._count._all]));
+    const allCards: { id: string; name: string; img: string; price: number; stock: number; buyPage: string; createdAt: Date }[] = [
+        ...storeProducts.map((product) => ({ id: product.id, name: product.name, img: product.image || "assets/icon/x/category.svg", price: product.price, stock: stockByProduct.get(product.id) || 0, buyPage: "buy", createdAt: product.createdAt })),
+        ...appProducts.map((app) => ({ id: app.id, name: app.name, img: app.image || "assets/icon/x/category.svg", price: app.price, stock: app.stock, buyPage: "buyapp", createdAt: app.createdAt })),
+    ].sort((a, b) => Number(b.stock > 0) - Number(a.stock > 0) || b.stock - a.stock || b.createdAt.getTime() - a.createdAt.getTime());
+    const buyLabel = user ? "สั่งซื้อตอนนี้เลย" : "เข้าสู่ระบบเพื่อซื้อ";
+    const filters = [
+        `<a class="shop-category-filter is-active" href="?page=shop">ทั้งหมด <span>${allCards.length}</span></a>`,
+        ...categories.map((category) => `<a class="shop-category-filter" href="?page=shop&amp;cat=${esc(category.id)}">${esc(category.name)} <span>${countByCategory.get(category.id) || 0}</span></a>`),
+    ].join("");
+    const cards = allCards.length
+        ? CARD_STYLE + `<div class="row g-3 hx-product-grid">${allCards.map((card) => productCard({ ...card, buyLabel })).join("")}</div>`
+        : `<div class="hx-empty card">ยังไม่มีสินค้าในตอนนี้</div>`;
+    return `<section class="shop-catalog">
+        <header class="shop-catalog-head"><div><span class="shop-catalog-kicker">CATALOG</span><h1>สินค้าทั้งหมด</h1><p>สินค้าในร้านและแอพพรีเมี่ยม</p></div><span class="shop-catalog-count">${allCards.length} รายการ</span></header>
+        <nav class="shop-category-filters" aria-label="กรองสินค้าตามหมวดหมู่">${filters}</nav>
+        ${cards}
+    </section>`;
 }
 
 // ---------------- PAYMENT ----------------
@@ -830,7 +819,7 @@ export function bodyMyApp(rows: { no: string; name: string; total: number; paylo
 // ---------------- CONTACT ----------------
 export function bodyContact(st: Record<string, string>): string {
   const fb = st.contact_facebook_url || "";
-  const dc = st.contact_discord_url || "";
+    const dc = st.contact_discord_url || "https://discord.com/invite/43ffwecVJT";
   return `${pageBanner("assets/icon/x/contact.svg", "ช่องทางการติดต่อ")}
                         <div class="col-lg-3">
                             <div class="container-fluid bg-custom p-4 pt-5 rounded shadow-sm border-ys count-only" style="border-radius: 1vh;">
@@ -845,10 +834,11 @@ export function bodyContact(st: Record<string, string>): string {
 
                         <div class="col-lg-3">
                             <div class="container-fluid bg-custom p-4 pt-5 rounded shadow-sm border-ys count-only" style="border-radius: 1vh;">
-                                <a href="${esc(dc)}" style="text-decoration: none;">
+                                <a href="${esc(dc)}" target="_blank" rel="noopener noreferrer" aria-label="เข้าร่วม Discord Ahtee SHOP" style="text-decoration: none;">
                                     <center>
                                         <img src="assets/icon/x/discord.svg" class="img-fluid mb-3" alt="Discord" style="height: 100px;">
                                         <h2 class="ms-1 mb-0">Discord</h2>
+                                        <small class="ms-1">เข้าร่วมเซิร์ฟเวอร์ Ahtee SHOP</small>
                                     </center>
                                 </a>
                             </div>

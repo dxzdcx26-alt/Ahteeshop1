@@ -21,7 +21,7 @@ const TITLES: Record<string, string> = {
   inbox: "กล่องข้อความ", admin: "หลังบ้าน", logout: "ออกจากระบบ",
 };
 
-const AUTH_PAGES = new Set(["shop", "payment", "truemoney", "slip", "redeem", "information", "history", "my_order", "my_premiumapp", "reward", "random_wheel", "wheel", "app", "buyapp", "inbox"]);
+const AUTH_PAGES = new Set(["payment", "truemoney", "slip", "redeem", "information", "history", "my_order", "my_premiumapp", "reward", "random_wheel", "wheel", "app", "buyapp", "inbox"]);
 
 function html(body: string, status = 200): NextResponse {
   const res = new NextResponse(body, { status });
@@ -89,7 +89,8 @@ export async function GET(req: NextRequest) {
     case "buy": {
       const id = sp.get("id");
       const p = id ? await db.product.findUnique({ where: { id } }) : null;
-      if (!p || !user) return NextResponse.redirect(new URL("/?page=shop", req.url), 302);
+      if (!p) return NextResponse.redirect(new URL("/?page=shop", req.url), 302);
+      if (!user) return NextResponse.redirect(new URL("/?page=login", req.url), 302);
       const stock = await db.productItem.count({ where: { productId: p.id, sold: false } });
       title = "สั่งซื้อสินค้า";
       body = bodyProductBuy({ id: p.id, name: p.name, img: p.image || "assets/icon/x/box.svg", price: p.price, stock, detail: p.detail }, user);
