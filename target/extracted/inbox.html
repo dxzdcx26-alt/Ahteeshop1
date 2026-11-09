@@ -1,0 +1,38 @@
+<style>
+  .ib-item { border-radius: 1vh; margin-bottom: .6rem; cursor: pointer; transition: transform .1s; }
+  .ib-item:hover { transform: translateY(-1px); }
+  .ib-item.unread { border-left: 4px solid var(--c-main, var(--main)) !important; }
+  .ib-body { display: none; white-space: normal; word-break: break-word; }
+  .ib-item.open .ib-body { display: block; }
+  .ib-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--c-main, var(--main)); display: inline-block; }
+</style>
+<div class="container-sm mt-3 mb-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="m-0"><img src="assets/icon/x/inbox.svg" alt="" class="hx-ic" style="height:2.3rem;width:2.3rem;vertical-align:middle;margin:-.2rem .45rem 0 0">กล่องข้อความ</h3>
+      </div>
+      <div class="card p-5 text-center"><p class="m-0 text-muted">ยังไม่มีข้อความ</p></div>
+    </div>
+<script>
+(function(){
+  var csrf = "bb80991622c535f4846b41e8d2f162eb698337adfb14f852c3a58b8c6c5f851c";
+  function post(d){ d.csrf = csrf; return $.post('services/inbox.php', d).done(function(r){ $('.inbox-count').text(r.unread).toggle(r.unread > 0); }); }
+  $('.ib-item').on('click', function(e){
+    if ($(e.target).closest('button,a').length) return;
+    var it = $(this); it.toggleClass('open');
+    if (it.hasClass('unread')) { it.removeClass('unread').find('.ib-dot').remove(); post({action:'read', id: it.data('id')}); }
+  });
+  $('#ib_all').on('click', function(){ post({action:'read_all'}).done(function(){ $('.ib-item').removeClass('unread'); $('.ib-dot').remove(); }); });
+  $('.ib-copy').on('click', function(){
+    var t = $(this).closest('.ib-item').find('.ib-raw').val();
+    (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.resolve()).then(function(){ Swal.fire({icon:'success', title:'คัดลอกแล้ว', timer:1100, showConfirmButton:false}); });
+  });
+  $('.ib-del').on('click', function(){
+    var it = $(this).closest('.ib-item');
+    Swal.fire({title:'ลบข้อความนี้?', icon:'warning', showCancelButton:true, confirmButtonText:'ลบ', cancelButtonText:'ยกเลิก'}).then(function(r){
+      if (r.isConfirmed) post({action:'delete', id: it.data('id')}).done(function(){ it.remove(); });
+    });
+  });
+  })();
+</script>
+        
+        

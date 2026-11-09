@@ -1,0 +1,73 @@
+<div class="container hx">
+
+  <!-- ================= HERO (แตกต่างตามธีม) ================= -->
+  <section class="hx-hero">
+    <div class="hx-hero-top">
+      <div class="hx-hero-txt">
+        <span class="hx-badge"><span class="dot"></span> ระบบอัตโนมัติ 24 ชม.</span>
+        <h1><span class="hx-grad">Ahtee</span></h1>
+        <div class="hx-lead">Ahtee</div>
+      </div>
+          <div class="hx-cta">
+      <a class="btn bg-main" href="?page=shop"><i class="fa-solid fa-bag-shopping"></i>&nbsp; เลือกซื้อสินค้า</a>
+      <a class="btn btn-outline-secondary" href="?page=payment"><i class="fa-solid fa-wallet"></i>&nbsp; เติมเงิน</a>
+          </div>
+        </div>
+      </section>
+
+    <div class="hx-ticker card"><span class="lbl"><i class="fa-solid fa-bullhorn"></i> ประกาศ</span><div style="overflow:hidden;flex:1"><span class="track">ยินดีต้อนรับ</span></div></div>
+  
+  
+  <!-- ================= สถิติ ================= -->
+  <section class="hx-sec">
+    <div class="hx-stats">
+            <div class="hx-stat card">
+        <div class="ic"><i class="fa-solid fa-users"></i></div>
+        <div><div class="num" data-count="2">2</div><div class="lbl">สมาชิกทั้งหมด (คน)</div></div>
+      </div>
+            <div class="hx-stat card">
+        <div class="ic"><i class="fa-solid fa-layer-group"></i></div>
+        <div><div class="num" data-count="0">0</div><div class="lbl">หมวดหมู่ (หมวด)</div></div>
+      </div>
+            <div class="hx-stat card">
+        <div class="ic"><i class="fa-solid fa-box"></i></div>
+        <div><div class="num" data-count="0">0</div><div class="lbl">พร้อมจำหน่าย (ชิ้น)</div></div>
+      </div>
+            <div class="hx-stat card">
+        <div class="ic"><i class="fa-solid fa-bag-shopping"></i></div>
+        <div><div class="num" data-count="0">0</div><div class="lbl">จำหน่ายแล้ว (ครั้ง)</div></div>
+      </div>
+          </div>
+  </section>
+
+  <!-- ================= หมวดหมู่แนะนำ + บริการแนะนำ (ซ้าย/ขวา) ================= -->
+  <section class="hx-sec">
+    <div class="hx-duo-col">
+    <div class="hx-head"><div class="hx-head-t"><img src="assets/icon/x/category.svg" alt="" class="hx-head-ic"><div><span class="hx-kicker">Categories</span><h2>หมวดหมู่แนะนำ</h2></div></div><a class="btn btn-outline-secondary btn-sm hx-more" href="?page=shop">ดูทั้งหมด <i class="fa-solid fa-arrow-right"></i></a></div>
+      <div class="hx-empty card">ยังไม่มีหมวดหมู่</div>    </div>
+      </section>
+
+  <!-- ================= สินค้าแนะนำ ================= -->
+  <section class="hx-sec">
+    <div class="hx-head"><div class="hx-head-t"><img src="assets/icon/x/fire.svg" alt="" class="hx-head-ic"><div><span class="hx-kicker">Recommended</span><h2>สินค้าแนะนำ</h2></div></div><a class="btn btn-outline-secondary btn-sm hx-more" href="?page=shop">ดูทั้งหมด <i class="fa-solid fa-arrow-right"></i></a></div>
+    <div class="hx-empty card">ยังไม่มีสินค้า</div>  </section>
+
+</div>
+
+<script>
+// นับเลขสถิติเมื่อเลื่อนมาเห็น
+(function () {
+  var els = document.querySelectorAll('.hx-stat .num[data-count]');
+  if (!('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function (ents) {
+    ents.forEach(function (en) {
+      if (!en.isIntersecting) return; io.unobserve(en.target);
+      var el = en.target, to = +el.dataset.count, t0 = performance.now(), d = 1200;
+      (function step(t) { var k = Math.min(1, (t - t0) / d); el.textContent = Math.round(to * (1 - Math.pow(1 - k, 3))).toLocaleString(); if (k < 1) requestAnimationFrame(step); })(t0);
+    });
+  }, { threshold: .4 });
+  els.forEach(function (el) { io.observe(el); });
+})();
+</script>
+        
+        

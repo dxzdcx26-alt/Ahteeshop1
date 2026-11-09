@@ -1,0 +1,159 @@
+<style>
+    .font-bold {
+        font-weight: 700;
+    }
+
+    .font-semibold {
+        font-weight: 600;
+    }
+
+    .img-anim {
+        position: relative;
+        text-align: center;
+        overflow: hidden;
+        border-radius: 1vh;
+    }
+
+    .img-anim img {
+        width: 100%;
+        height: auto;
+        margin-left: auto;
+    }
+
+    .img-anim>img {
+        background-size: cover;
+        background-position: center;
+        transition: all 0.3s ease;
+    }
+
+    .img-anim>div.bg {
+        position: absolute;
+        z-index: 2;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(1, 1, 1, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .img-anim>div.text {
+        position: absolute;
+        z-index: 3;
+        top: 120%;
+        left: 50%;
+        opacity: 0;
+        color: #fff;
+        font-size: 20px;
+        border-bottom: 3px solid transparent;
+        border-image: linear-gradient(to right, var(--main), var(--main));
+        border-image-slice: 1;
+        transform: translate(-50%, -50%);
+        transition: all 0.3s ease;
+    }
+
+    .img-anim:hover>img {
+        transform: scale(1.1);
+    }
+
+    .img-anim:hover>div {
+        opacity: 1;
+    }
+
+    .img-anim:hover>div.text {
+        top: 80%;
+        opacity: 1;
+    }
+
+    .content {
+        height: auto;
+        border: 3px solid rgba(0, 0, 0, .3);
+        transition: all .5s ease;
+    }
+
+    .content:hover {
+        border: 3.5px solid var(--main);
+    }
+
+    .btn-main {
+        color: var(--main);
+        background: var(--main-30);
+        border: 1px solid var(--main);
+        transition: all .5s ease;
+    }
+
+    .btn-main.active {
+        color: white;
+        background-color: var(--main);
+        border: 1px solid var(--main);
+    }
+
+    .btn-main.active i {
+        color: white !important;
+    }
+
+    .btn-main:hover {
+        color: white;
+        background-color: var(--main);
+        border: 1px solid var(--main);
+    }
+
+    .btn-main-stock0 {
+        color: red;
+        background: ;
+        border: 1px solid red;
+        transition: all .5s ease;
+    }
+
+    .btn-main-stock0.active {
+        color: white;
+        background-color: red;
+        border: 1px solid red;
+    }
+
+    .btn-main-stock0.active i {
+        color: white !important;
+    }
+
+    .btn-main-stock0:hover {
+        color: white;
+        background-color: red;
+        border: 1px solid red;
+    }
+
+    @media only screen and (max-width: 500px) {
+        .pd-sm-font {
+            font-size: 13px !important;
+        }
+
+        .pd-h-font {
+            font-size: 16px;
+        }
+    }
+</style>
+<div class="container-fluid p-0 ">
+    <div class="container-sm  m-cent  p-0 pt-4 ">
+        <div class="container-sm ">
+            <div class="container-fluid">
+                <div class="container-fluid" data-aos="zoom-in">
+
+                    
+                        <center>
+                            <div class="col-12 col-lg-12 p-0 mb-2" style="border-radius: 1vh;">
+                                <div class="d-flex justify-content-between">
+                                    <div class="text-center text-lg-start">
+                                        <h2 class=" mt-2 mb-0 font-semibold"><img src="assets/icon/x/category.svg" alt="" class="hx-ic" style="height:2.3rem;width:2.3rem;vertical-align:middle;margin:-.2rem .45rem 0 0"><b>หมวดหมู่ทั้งหมด</b></h2>
+                                    </div>
+                                    <a class="btn nav-link align-self-center bg-main mt-0" onclick="window.history.back()" style="height: fit-content;border-radius: 1vh;"><b style="color: #ffffff;">ย้อนกลับ</b></a>
+                                </div>
+                            </div>
+                        </center>
+
+                                        <hr>
+                    <div class="row justify-content-center justify-content-lg-start">
+                        <h6 class=" text-center">ไม่มีหมวดหมู่ในตอนนี้</h6>                                                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>        
+        

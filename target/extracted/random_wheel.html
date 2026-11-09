@@ -1,0 +1,97 @@
+<style>
+   .img-anim {
+        position: relative;
+        text-align: center;
+        overflow: hidden;
+        border-radius: 1vh;
+    }
+
+    .img-anim img {
+        width: 100%;
+        height: auto;
+        margin-left: auto;
+    }
+
+    .img-anim>img {
+        background-size: cover;
+        background-position: center;
+        transition: all 0.3s ease;
+    }
+
+    .img-anim>div.bg {
+        position: absolute;
+        z-index: 2;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(1, 1, 1, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .img-anim>div.text {
+        position: absolute;
+        z-index: 3;
+        top: 120%;
+        left: 50%;
+        opacity: 0;
+        color: #fff;
+        font-size: 20px;
+        border-bottom: 3px solid transparent;
+        border-image: linear-gradient(to right, var(--main), var(--main));
+        border-image-slice: 1;
+        transform: translate(-50%, -50%);
+        transition: all 0.3s ease;
+    }
+
+    .img-anim:hover>img {
+        transform: scale(1.1);
+    }
+
+    .img-anim:hover>div {
+        opacity: 1;
+    }
+
+    .img-anim:hover>div.text {
+        top: 80%;
+        opacity: 1;
+    }
+
+    .content {
+        height: auto;
+        border: 3px solid rgba(0, 0, 0, .3);
+        transition: all .5s ease;
+    }
+
+    .content:hover {
+        border: 3.5px solid var(--main);
+    }
+    .font-bold {
+        font-weight: 700;
+    }
+    .font-semibold {
+        font-weight: 600;
+    }  
+</style>
+<div class="container-lg p-4">
+    <div class="container-sm m-auto p-4 pt-0">
+        <div class="container-lg" data-aos="zoom-in">
+
+            <center>
+                <div class="col-12 col-lg-12 p-0 mb-2" style="border-radius: 1vh;">
+                    <div class="d-flex justify-content-between">
+                        <div class="text-center text-lg-start">
+                            <h2 class=" mt-2 mb-0 font-semibold"><img src="assets/icon/x/wheel.svg" alt="" class="hx-ic" style="height:2.3rem;width:2.3rem;vertical-align:middle;margin:-.2rem .45rem 0 0"><b>สุ่มวงล้อทั้งหมด</b></h2>
+                        </div>
+                        <a class="btn nav-link align-self-center bg-main mt-0" onclick="window.history.back()" style="height: fit-content;border-radius: 1vh;"><b style="color: #ffffff;">ย้อนกลับ</b></a>
+                    </div>
+                </div>
+            </center>
+            <hr>
+            <div class="row justify-content-center justify-content-lg-start">
+
+                        
+            </div>
+        </div>
+    </div>
+</div>        
+        
