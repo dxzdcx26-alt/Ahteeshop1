@@ -493,8 +493,6 @@ export function footerHTML(st: Record<string, string>, csrf: string): string {
                 // };
                 // var typed = new Typed('#typing', options);
             </script>
-            <!-- ตัวไฟล์กัน f12 และ คลิ๊กขวา -->
-            <script src="services/js/obfuscateds1.j"></script>
     <script>window.SITE_PARTICLE={"type":"coin","amount":1,"speed":1};</script><script src="services/js/particles.js?v=1793782706" defer></script><script>(function(){if(matchMedia("(hover:none)").matches)return;document.addEventListener("pointermove",function(e){var c=e.target.closest&&e.target.closest(".sc.fx-tilt:not(.is-out)");document.querySelectorAll(".sc.fx-tilt.is-tilt").forEach(function(x){if(x!==c){x.classList.remove("is-tilt");x.style.transform="";}});if(!c)return;var r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;c.classList.add("is-tilt");c.style.transform="perspective(800px) rotateX("+((.5-y)*10).toFixed(2)+"deg) rotateY("+((x-.5)*12).toFixed(2)+"deg) translateY(-4px)";c.style.setProperty("--gx",(x*100).toFixed(1)+"%");c.style.setProperty("--gy",(y*100).toFixed(1)+"%");});})();</script></body>
 
     </html>`;
