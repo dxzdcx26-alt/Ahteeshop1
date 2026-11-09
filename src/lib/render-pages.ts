@@ -84,7 +84,7 @@ export async function bodyHome(st: Record<string, string>, user: SessionUser | n
     prodsHtml = `<div class="hx-empty card">ยังไม่มีสินค้า</div>`;
   } else {
     const stocks = await db.productItem.count({ where: { product: { id: { in: prodsList.map((p) => p.id) } }, sold: false } });
-    prodsHtml = CARD_STYLE + `<div class="row g-3">` + prodsList.map((p) => productCard({ id: p.id, name: p.name, img: p.image || "assets/icon/x/box.svg", price: p.price, stock: stocks, buyPage: "buy" })).join("") + `</div>`;
+    prodsHtml = CARD_STYLE + `<div class="row g-3">` + prodsList.map((p) => productCard({ id: p.id, name: p.name, img: p.image || "assets/icon/x/category.svg", price: p.price, stock: stocks, buyPage: "buy" })).join("") + `</div>`;
   }
 
   return `<div class="container hx">
@@ -348,7 +348,7 @@ export async function bodyShop(st: Record<string, string>, user: SessionUser | n
       const rows = await Promise.all(
         cat.products.map(async (p) => {
           const stock = await db.productItem.count({ where: { productId: p.id, sold: false } });
-          return productCard({ id: p.id, name: p.name, img: p.image || "assets/icon/x/box.svg", price: p.price, stock, buyPage: "buy", buyLabel: "สั่งซื้อสินค้า", aos: ` data-aos="zoom-in"` });
+          return productCard({ id: p.id, name: p.name, img: p.image || "assets/icon/x/category.svg", price: p.price, stock, buyPage: "buy", buyLabel: "สั่งซื้อสินค้า", aos: ` data-aos="zoom-in"` });
         })
       );
       cards = CARD_STYLE + `<div class="row justify-content-center justify-content-lg-start">` + rows.join("") + `</div>`;
