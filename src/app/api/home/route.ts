@@ -28,7 +28,7 @@ export async function GET() {
   return NextResponse.json({
     status: true,
     settings: {
-      siteName: settings.siteName || "Ahtee",
+      siteName: settings.siteName || "AhteeShop",
       siteTagline: settings.siteTagline || "",
       heroBadge: settings.heroBadge || "",
       heroLead: settings.heroLead || "",

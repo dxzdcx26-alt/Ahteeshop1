@@ -208,12 +208,12 @@ export function adminAnnounce(anns: { id: string; text: string; active: boolean 
 
 export function adminSettings(st: Record<string, string>): string {
   const fields: [string, string, string][] = [
-    ["site_name", "ชื่อร้าน (โลโก้ตัวอักษร)", "Ahtee"],
-    ["site_title", "Title เว็บ", "Ahtee | เติมเกมอัตโนมัติ 24 ชม."],
-    ["site_desc", "คำอธิบายเว็บ (og:description)", "Ahtee"],
-    ["hero_lead", "ข้อความใต้ชื่อหน้าแรก", "Ahtee"],
-    ["foot_brand", "ข้อความท้ายเว็บ (ฝั่งซ้าย)", "Ahtee — เติมเกมไว ปลอดภัย 24 ชม."],
-    ["foot_copy", "ลิขสิทธิ์ท้ายเว็บ", "2023 spaceXnet Cloud, All right reserved."],
+    ["site_name", "ชื่อร้าน (โลโก้ตัวอักษร)", "AhteeShop"],
+    ["site_title", "Title เว็บ", "AhteeShop | เติมเกมอัตโนมัติ 24 ชม."],
+    ["site_desc", "คำอธิบายเว็บ (og:description)", "AhteeShop — ร้านเติมเกมและแอพพรีเมี่ยมอัตโนมัติ 24 ชม."],
+    ["hero_lead", "ข้อความใต้ชื่อหน้าแรก", "เติมเกมไว ปลอดภัย 24 ชม."],
+    ["foot_brand", "ข้อความท้ายเว็บ (ฝั่งซ้าย)", "AhteeShop — เติมเกมไว ปลอดภัย 24 ชม."],
+    ["foot_copy", "ลิขสิทธิ์ท้ายเว็บ", "2025 AhteeShop, All right reserved."],
     ["foot_report_url", "ลิงก์แจ้งปัญหา (ท้ายเว็บ)", "https://discord.gg/dfnxcloud"],
     ["foot_report_text", "ข้อความแจ้งปัญหา", "ติดต่อเจ้าของร้านไม่ได้ / แจ้งปัญหาร้านค้าโกง"],
     ["contact_facebook_url", "ลิงก์ Facebook", ""],

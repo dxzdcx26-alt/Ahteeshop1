@@ -46,7 +46,7 @@ export function productCard(o: { id: string; name: string; img: string; price: n
 
 // ---------------- HOME ----------------
 export async function bodyHome(st: Record<string, string>, user: SessionUser | null): Promise<string> {
-  const name = st.site_name || "Ahtee";
+  const name = st.site_name || "AhteeShop";
   const lead = st.hero_lead || name;
   const anns = await db.announcement.findMany({ where: { active: true } });
   const track = esc(anns.map((a) => a.text).join(" • ") || "ยินดีต้อนรับ");
@@ -72,7 +72,15 @@ export async function bodyHome(st: Record<string, string>, user: SessionUser | n
   }
 
   const catsList = await db.category.findMany({ where: { active: true }, orderBy: { sortOrder: "asc" }, take: 4 });
-  const prodsList = await db.product.findMany({ where: { active: true, featured: true }, orderBy: { createdAt: "desc" }, take: 4 });
+  // สินค้าแนะนำหน้าแรก 8 ชิ้น: สินค้าร้านที่ตั้ง featured ก่อน แล้วเติมด้วยแอพพรีเมี่ยม (ของมีสต็อกก่อน)
+  const featProds = await db.product.findMany({ where: { active: true, featured: true }, orderBy: { createdAt: "desc" }, take: 8 });
+  const featApps = featProds.length < 8
+    ? await db.appProduct.findMany({ where: { active: true }, orderBy: [{ active: "desc" }, { extId: "asc" }], take: 8 - featProds.length })
+    : [];
+  const featCards: { id: string; name: string; img: string; price: number; stock: number; buyPage: string }[] = [
+    ...featProds.map((p) => ({ id: p.id, name: p.name, img: p.image || "assets/icon/x/category.svg", price: p.price, stock: 0, buyPage: "buy" })),
+    ...featApps.map((a) => ({ id: a.id, name: a.name, img: a.image || "assets/icon/x/category.svg", price: a.price, stock: a.stock, buyPage: "buyapp" })),
+  ];
   let catsHtml: string;
   if (catsList.length === 0) {
     catsHtml = `<div class="hx-empty card">ยังไม่มีหมวดหมู่</div>`;
@@ -80,11 +88,12 @@ export async function bodyHome(st: Record<string, string>, user: SessionUser | n
     catsHtml = `<div class="row g-3">` + catsList.map((c) => productCard({ id: c.id, name: c.name, img: c.image || "assets/icon/x/category.svg", price: 0, stock: 0, buyPage: "cat", buyLabel: "เข้าชมหมวดนี้" }).replace(/<p class="text-main[\s\S]*?<\/p>/, "").replace(/<p class="text-white main-badge[\s\S]*?<\/p>/, "")).join("") + `</div>`;
   }
   let prodsHtml: string;
-  if (prodsList.length === 0) {
+  if (featCards.length === 0) {
     prodsHtml = `<div class="hx-empty card">ยังไม่มีสินค้า</div>`;
   } else {
-    const stocks = await db.productItem.count({ where: { product: { id: { in: prodsList.map((p) => p.id) } }, sold: false } });
-    prodsHtml = CARD_STYLE + `<div class="row g-3">` + prodsList.map((p) => productCard({ id: p.id, name: p.name, img: p.image || "assets/icon/x/category.svg", price: p.price, stock: stocks, buyPage: "buy" })).join("") + `</div>`;
+    const stocks = await Promise.all(featProds.map((p) => db.productItem.count({ where: { productId: p.id, sold: false } })));
+    featProds.forEach((_, i) => { featCards[i].stock = stocks[i]; });
+    prodsHtml = CARD_STYLE + `<div class="row g-3">` + featCards.map((c) => productCard(c)).join("") + `</div>`;
   }
 
   return `<div class="container hx">
@@ -151,7 +160,7 @@ export async function bodyHome(st: Record<string, string>, user: SessionUser | n
 
 // ---------------- LOGIN ----------------
 export function bodyLogin(st: Record<string, string>): string {
-  const name = st.site_name || "Ahtee";
+  const name = st.site_name || "AhteeShop";
   return `${PAGE_HEAD_STYLE}<div class="container-fluid p-4">
     <div class="container-sm  m-cent ps-4 pe-4">
         <center>
@@ -238,7 +247,7 @@ export function bodyLogin(st: Record<string, string>): string {
 
 // ---------------- REGISTER ----------------
 export function bodyRegister(st: Record<string, string>): string {
-  const name = st.site_name || "Ahtee";
+  const name = st.site_name || "AhteeShop";
   return `${PAGE_HEAD_STYLE}<div class="container-fluid p-4">
     <div class="container-sm m-cent ps-4 pe-4">
         <center>
@@ -339,7 +348,7 @@ export function bodyRegister(st: Record<string, string>): string {
 
 // ---------------- SHOP ----------------
 export async function bodyShop(st: Record<string, string>, user: SessionUser | null, catId: string | null): Promise<string> {
-  const name = st.site_name || "Ahtee";
+  const name = st.site_name || "AhteeShop";
   if (catId) {
     const cat = await db.category.findUnique({ where: { id: catId }, include: { products: { where: { active: true }, orderBy: { createdAt: "desc" } } } });
     if (!cat) return bodyShop(st, user, null);

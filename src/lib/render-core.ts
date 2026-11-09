@@ -33,8 +33,8 @@ export async function getSite(s = null as Record<string, string> | null) {
 
 // ---------------- HEAD (exact copy of original head block) ----------------
 export function headHTML(st: Record<string, string>, page: string, title: string): string {
-  const name = st.site_name || "Ahtee";
-  const siteTitle = st.site_title || "Ahtee | เติมเกมอัตโนมัติ 24 ชม.";
+  const name = st.site_name || "AhteeShop";
+  const siteTitle = st.site_title || "AhteeShop | เติมเกมอัตโนมัติ 24 ชม.";
   const desc = st.site_desc || name;
   return `<!DOCTYPE html>
 <html lang="en">
@@ -55,6 +55,7 @@ export function headHTML(st: Record<string, string>, page: string, title: string
         <meta name="description" content="${esc(desc)}">
 
     <title>${esc(title === "ยินดีต้อนรับ" ? siteTitle : siteTitle + " - " + title)}</title>
+    <link rel="icon" type="image/png" href="${esc(st.logo_url || "favicon.png")}">
     
     <link rel="stylesheet" href="services/styles/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -279,7 +280,7 @@ export function navLinksHTML(active: string, isMobile = false): string {
 }
 
 export function headerHTML(st: Record<string, string>, user: SessionUser | null, unread: number, active: string): string {
-  const name = st.site_name || "Ahtee";
+  const name = st.site_name || "AhteeShop";
   const modeBtn = `<button class="dn-icon dn-mode" type="button" aria-label="สลับโหมดมืด/สว่าง" title="สลับโหมดมืด/สว่าง" onclick="siteToggleMode()"><i class="fa-solid fa-moon dn-mode-dark"></i><i class="fa-solid fa-sun dn-mode-light"></i></button><script>function siteToggleMode(){var d=document.documentElement,n=d.getAttribute("data-mode")==="dark"?"light":"dark";d.classList.add("mode-anim");d.setAttribute("data-mode",n);try{localStorage.setItem("site_mode",n);}catch(e){}setTimeout(function(){d.classList.remove("mode-anim");},450);}</script>`;
   let right = "";
   if (user) {
@@ -367,11 +368,11 @@ export function buyModalHTML(user: SessionUser | null): string {
 
 // ---------------- FOOTER ----------------
 export function footerHTML(st: Record<string, string>, csrf: string): string {
-  const name = st.site_name || "Ahtee";
+  const name = st.site_name || "AhteeShop";
   const brand = st.foot_brand || `${name} — เติมเกมไว ปลอดภัย 24 ชม.`;
-  const copy = st.foot_copy || "2023 spaceXnet Cloud, All right reserved.";
-  const reportUrl = st.foot_report_url || "https://discord.gg/dfnxcloud";
-  const reportTxt = st.foot_report_text || "ติดต่อเจ้าของร้านไม่ได้ / แจ้งปัญหาร้านค้าโกง";
+  const copy = st.foot_copy || "2025 AhteeShop, All right reserved.";
+  const reportUrl = st.foot_report_url || "";
+  const reportTxt = st.foot_report_text || "ติดต่อเจ้าของร้าน / แจ้งปัญหาการใช้งาน";
   return `<footer class="site-foot">
             <div class="container site-foot-in">
                 <div class="site-foot-brand">
@@ -379,13 +380,13 @@ export function footerHTML(st: Record<string, string>, csrf: string): string {
                 </div>
                 <div class="site-foot-links">
                     <span>ติดต่อเรา</span>
-                    <a href="${esc(st.contact_facebook_url || "")}" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>
-                    <a href="${esc(st.contact_discord_url || "")}" target="_blank" rel="noopener"><i class="fa-brands fa-discord"></i> Discord</a>
+                    ${st.contact_facebook_url ? `<a href="${esc(st.contact_facebook_url)}" target="_blank" rel="noopener"><i class="fa-brands fa-facebook"></i> Facebook</a>` : ""}
+                    ${st.contact_discord_url ? `<a href="${esc(st.contact_discord_url)}" target="_blank" rel="noopener"><i class="fa-brands fa-discord"></i> Discord</a>` : ""}
                 </div>
             </div>
             <div class="container site-foot-bottom">
                 <span><i class="fa-regular fa-copyright"></i> ${esc(copy)}</span>
-                <a href="${esc(reportUrl)}" target="_blank" rel="noopener">${esc(reportTxt)}</a>
+                ${reportUrl ? `<a href="${esc(reportUrl)}" target="_blank" rel="noopener">${esc(reportTxt)}</a>` : `<span>${esc(reportTxt)}</span>`}
             </div>
             <script>
                 async function shake_alert(status, result) {
