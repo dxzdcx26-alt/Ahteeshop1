@@ -1,65 +1,71 @@
-import { PrismaClient } from "@prisma/client";
+// Seed real data: admin account, site settings (exact values from the original site),
+// the real premium-app catalog captured from the target site, and the homepage announcement.
 import bcrypt from "bcryptjs";
+import { PrismaClient } from "@prisma/client";
+import { readFileSync } from "fs";
 
 const db = new PrismaClient();
 
-async function main() {
-  const admin = await db.user.upsert({
-    where: { username: "admin" },
-    update: {},
-    create: {
-      username: "admin",
-      password: await bcrypt.hash("admin1234", 10),
-      role: "admin",
-      balance: 0,
-      points: 0,
-    },
-  });
+const SETTINGS: Record<string, string> = {
+  site_name: "Ahtee",
+  site_title: "Ahtee | เติมเกมอัตโนมัติ 24 ชม.",
+  site_desc: "Ahtee",
+  hero_lead: "Ahtee",
+  foot_brand: "Ahtee — เติมเกมไว ปลอดภัย 24 ชม.",
+  foot_copy: "2023 spaceXnet Cloud, All right reserved.",
+  foot_report_url: "https://discord.gg/dfnxcloud",
+  foot_report_text: "ติดต่อเจ้าของร้านไม่ได้ / แจ้งปัญหาร้านค้าโกง",
+  contact_facebook_url: "",
+  contact_discord_url: "",
+  logo_url: "",
+};
 
-  const settings: Record<string, string> = {
-    siteName: "Ahtee",
-    siteTagline: "เติมเกมอัตโนมัติ 24 ชม.",
-    heroBadge: "ระบบอัตโนมัติ 24 ชม.",
-    heroLead: "Ahtee",
-    footerText: "Ahtee — เติมเกมไว ปลอดภัย 24 ชม.",
-    facebookUrl: "",
-    discordUrl: "",
-    contactNote: "ติดต่อเจ้าของร้านไม่ได้ / แจ้งปัญหาร้านค้าโกง",
-    paymentInfo:
-      "ธนาคาร: กสิกรไทย\nชื่อบัญชี: Ahtee Shop\nเลขบัญชี: 000-0-00000-0\n\nPromptPay: 0x0-000-0000",
-    wheelCostPoints: "0",
-    wheelFreeDaily: "1",
-    appInfo:
-      "แอพพรีเมี่ยม Ahtee — สมัครแพ็กเกจพรีเมี่ยมเพื่อรับส่วนลดพิเศษและสิทธิ์ในการใช้งานระบบก่อนใคร",
-    appLink: "",
-  };
-  for (const [key, value] of Object.entries(settings)) {
-    await db.setting.upsert({ where: { key }, update: {}, create: { key, value } });
+async function main() {
+  // settings
+  for (const [key, value] of Object.entries(SETTINGS)) {
+    await db.setting.upsert({ where: { key }, create: { key, value }, update: { value } });
   }
 
-  await db.announcement.upsert({
-    where: { id: "seed-ann" },
-    update: { text: "ยินดีต้อนรับ" },
-    create: { id: "seed-ann", text: "ยินดีต้อนรับ", active: true },
-  });
+  // announcement shown in the homepage ticker (real value from the original)
+  const annCount = await db.announcement.count();
+  if (annCount === 0) {
+    await db.announcement.create({ data: { text: "ยินดีต้อนรับ", active: true } });
+  }
 
-  const prizes = await db.wheelPrize.count();
-  if (prizes === 0) {
-    await db.wheelPrize.createMany({
-      data: [
-        { label: "ขอบคุณ", type: "none", value: 0, weight: 40, color: "#14120e", sortOrder: 1 },
-        { label: "5 บาท", type: "balance", value: 5, weight: 20, color: "#d4af37", sortOrder: 2 },
-        { label: "10 แต้ม", type: "points", value: 10, weight: 15, color: "#14120e", sortOrder: 3 },
-        { label: "20 บาท", type: "balance", value: 20, weight: 10, color: "#d4af37", sortOrder: 4 },
-        { label: "50 แต้ม", type: "points", value: 50, weight: 5, color: "#14120e", sortOrder: 5 },
-        { label: "100 บาท", type: "balance", value: 100, weight: 2, color: "#d4af37", sortOrder: 6 },
-      ],
+  // admin account
+  const admin = await db.user.findUnique({ where: { username: "admin" } });
+  if (!admin) {
+    await db.user.create({
+      data: {
+        username: "admin",
+        password: await bcrypt.hash("admin1234", 10),
+        role: "admin",
+      },
+    });
+    console.log("created admin/admin1234");
+  }
+
+  // real premium-app catalog captured from the target site (public catalog data)
+  const catalog: { id: string; name: string; price: string; stock: number; img: string }[] = JSON.parse(
+    readFileSync("/home/z/my-project/target/app_catalog.json", "utf-8")
+  );
+  for (const item of catalog) {
+    const extId = Number(item.id);
+    if (!Number.isFinite(extId)) continue;
+    const price = Number(String(item.price).replace(/[^0-9.]/g, "")) || 0;
+    await db.appProduct.upsert({
+      where: { extId },
+      create: { extId, name: item.name, image: item.img, price, stock: item.stock, detail: "", active: true },
+      update: { name: item.name, image: item.img, price, stock: item.stock },
     });
   }
-
-  console.log("Seed complete. Admin:", admin.username);
+  console.log("catalog items:", catalog.length);
 }
 
 main()
-  .catch(console.error)
-  .finally(() => db.$disconnect());
+  .then(() => db.$disconnect())
+  .catch(async (e) => {
+    console.error(e);
+    await db.$disconnect();
+    process.exit(1);
+  });
