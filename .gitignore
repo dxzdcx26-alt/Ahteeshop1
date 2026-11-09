@@ -55,3 +55,10 @@ server.log
 # runtime data
 /public/uploads/
 *.log
+
+# recon / local artifacts
+target/
+scripts/
+tool-results/
+dev.log
+server.log
