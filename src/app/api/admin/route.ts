@@ -143,6 +143,7 @@ export async function POST(req: NextRequest) {
 
       case "wheel.save": {
         const prizes = (body.prizes || []) as { id?: string; label: string; type: string; value: number; weight: number; color: string; sortOrder: number }[];
+        let wheelId: string | undefined;
         for (const [i, p] of prizes.entries()) {
           const data = {
             label: String(p.label || "").trim(),
@@ -154,7 +155,13 @@ export async function POST(req: NextRequest) {
           };
           if (!data.label) continue;
           if (p.id) await db.wheelPrize.update({ where: { id: p.id }, data });
-          else await db.wheelPrize.create({ data });
+          else {
+            if (!wheelId) {
+              const wheel = await db.wheel.findFirst({ where: { active: true }, orderBy: { createdAt: "asc" } });
+              wheelId = wheel?.id ?? (await db.wheel.create({ data: { name: "วงล้อหลัก" } })).id;
+            }
+            await db.wheelPrize.create({ data: { ...data, wheelId } });
+          }
         }
         return NextResponse.json({ status: true, message: "บันทึกวงล้อแล้ว" });
       }

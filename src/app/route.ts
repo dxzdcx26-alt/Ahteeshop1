@@ -117,7 +117,7 @@ export async function GET(req: NextRequest) {
         db.wheelSpin.findMany({ where: { userId: uid }, orderBy: { createdAt: "desc" }, include: { wheel: true } }),
       ]);
       const rows: HistoryRow[] = [
-        ...orders.map((o) => ({ name: `${o.productName} x${o.quantity}`, reward: o.payload || "-", date: o.createdAt, ok: o.status === "success" })),
+        ...orders.map((o) => ({ name: `${o.productName} x${o.quantity}`, reward: o.payloads || "-", date: o.createdAt, ok: o.status === "success" })),
         ...spins.map((s) => ({ name: `สุ่มวงล้อ: ${s.wheel.name}`, reward: s.prize, date: s.createdAt, ok: s.type !== "none" })),
       ].sort((a, b) => b.date.getTime() - a.date.getTime());
       body = bodyHistory(rows);
@@ -125,7 +125,7 @@ export async function GET(req: NextRequest) {
     }
     case "my_order": {
       const orders = await db.order.findMany({ where: { userId: user!.id }, orderBy: { createdAt: "desc" } });
-      const rows: OrderRow[] = orders.map((o) => ({ no: o.orderNo, name: o.productName, qty: o.quantity, total: o.total, payload: o.payload, status: o.status, date: o.createdAt }));
+      const rows: OrderRow[] = orders.map((o) => ({ no: o.orderNo, name: o.productName, qty: o.quantity, total: o.total, payload: o.payloads, status: o.status, date: o.createdAt }));
       body = bodyMyOrder(rows);
       break;
     }

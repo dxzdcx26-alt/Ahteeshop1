@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 import { getSessionUser, publicUser } from "@/lib/auth";
 import { getSettings } from "@/lib/site";
 
-function pickWeighted(prizes: { id: string; weight: number }[]) {
+function pickWeighted<T extends { id: string; weight: number }>(prizes: T[]): T {
   const total = prizes.reduce((s, p) => s + p.weight, 0);
   let r = Math.random() * total;
   for (const p of prizes) {
