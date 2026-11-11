@@ -56,8 +56,6 @@ model Product {
   price       Float    @default(0)
   featured    Boolean  @default(false)
   active      Boolean  @default(true)
-  hubzellServiceId String @default("")
-  hubzellProductId String @default("")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   items       ProductItem[]
@@ -86,9 +84,6 @@ model Order {
   total       Float
   payloads    String   @default("")
   status      String   @default("success")
-  hubzellClientRef     String @default("")
-  hubzellTransactionId String @default("")
-  hubzellStatus        String @default("")
   createdAt   DateTime @default(now())
 }
 
