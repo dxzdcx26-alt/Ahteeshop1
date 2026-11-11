@@ -109,8 +109,6 @@
 }
 h4 {
     width: 100%;
-    /* overflow: hidden;
-    white-space: nowrap; */
     text-overflow: ellipsis;
 }
 .underline-active:hover::after {
@@ -133,7 +131,7 @@ hr{
     opacity: 1;
 }
 .banner{
-    background: url("<?php echo $config['bg'];?>");
+    background: url("");
     background-position:  0% 25% ;
     background-size: cover!important;
     padding: 35px;
@@ -216,8 +214,6 @@ hr{
     border: 2px solid var(--dark-light);
 }
 .bg-nav-bar{
-    /* background: rgb(99,11,11);
-    background: linear-gradient(0deg, rgba(99,11,11,1) 0%, rgba(255,38,38,1) 90%); */
     background-color: #000;
 }
 .float-ani{
@@ -295,3 +291,4 @@ hr{
     --dark-light:  rgb(169,174,186);
 }
 
+@import url("/theme-pink.css");
