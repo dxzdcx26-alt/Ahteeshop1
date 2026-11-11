@@ -1,0 +1,124 @@
+:root, html[data-mode="dark"], html {
+  --c-main: #ff4da6 !important;
+  --c-sub: #ff9ec8 !important;
+  --c-page_bg: #12010c !important;
+  --c-text: #f7e6ef !important;
+  --c-heading: #ffe6f2 !important;
+  --c-muted: #c48aa8 !important;
+  --c-link: #ff4da6 !important;
+  --c-link_hover: #ff9ec8 !important;
+  --c-selection: #ff4da6 !important;
+  --c-nav_bg: #1a0a14f0 !important;
+  --c-nav_text: #f7e6ef !important;
+  --c-nav_hover: #ff4da6 !important;
+  --c-nav_line: #ff4da6 !important;
+  --c-nav_badge_bg: #ff4da6 !important;
+  --c-nav_badge_text: #1a0a14 !important;
+  --c-card_bg: #1c0d16 !important;
+  --c-card_text: #f7e6ef !important;
+  --c-card_title: #ffe6f2 !important;
+  --c-card_border: #3d1a2c !important;
+  --c-btn_bg: #ff4da6 !important;
+  --c-btn_text: #1a0a14 !important;
+  --c-btn_hover: #ff6bb5 !important;
+  --c-btn2_text: #ffe6f2 !important;
+  --c-btn2_border: #5a2740 !important;
+  --c-input_bg: #160812 !important;
+  --c-input_text: #ffe6f2 !important;
+  --c-input_border: #5a2740 !important;
+  --c-input_focus: #ff4da6 !important;
+  --c-placeholder: #c48aa8 !important;
+  --c-label: #f7e6ef !important;
+  --c-switch_on: #ff4da6 !important;
+  --c-table_text: #f7e6ef !important;
+  --c-table_head_bg: #160812 !important;
+  --c-table_head_text: #ffe6f2 !important;
+  --c-table_border: #3d1a2c !important;
+  --c-modal_bg: #1c0d16 !important;
+  --c-modal_text: #f7e6ef !important;
+  --c-hero_from: #ff4da6 !important;
+  --c-hero_to: #ff9ec8 !important;
+  --c-price: #ff7ebf !important;
+  --c-step_bg: #ff4da6 !important;
+  --c-footer_bg: #1a0a14 !important;
+  --c-footer_text: #c48aa8 !important;
+  --c-scroll_thumb: #ff4da6 !important;
+  --c-scroll_track: #12010c !important;
+  --c-adm_bg: #1c0d16 !important;
+  --c-adm_text: #f7e6ef !important;
+  --c-adm_hover: #ff4da6 !important;
+  --main: #ff4da6 !important;
+  --sub: #ff9ec8 !important;
+  --font: #f7e6ef !important;
+  --sub-opa-50: #ff4da680 !important;
+  --sub-opa-25: #ff4da640 !important;
+}
+html[data-mode="light"] {
+  --c-page_bg: #fff5fa !important;
+  --c-text: #4a2040 !important;
+  --c-heading: #2a0f22 !important;
+  --c-muted: #9a6a85 !important;
+  --c-nav_bg: #ffffffeb !important;
+  --c-nav_text: #4a2040 !important;
+  --c-card_bg: #ffffff !important;
+  --c-card_text: #4a2040 !important;
+  --c-card_title: #2a0f22 !important;
+  --c-card_border: #f5d0e4 !important;
+  --c-footer_bg: #fff5fa !important;
+  --c-footer_text: #9a6a85 !important;
+  --c-input_bg: #fff0f7 !important;
+  --c-input_text: #2a0f22 !important;
+  --c-input_border: #f0bdd8 !important;
+}
+.bg-main, .btn-main, .btn.bg-main, a.bg-main {
+  background: #ff4da6 !important;
+  color: #1a0a14 !important;
+  border-color: #ff4da6 !important;
+}
+.text-main, .text-main * { color: #ff4da6 !important; }
+.main-badge, .bg-main.main-badge { background: #ff4da6 !important; }
+.border-hov:hover, .card-anim-main:hover {
+  border-color: #ff4da6 !important;
+  box-shadow: 0 0 0 1px #ff4da655, 0 12px 32px -16px #ff4da680 !important;
+}
+.hx-grad {
+  background: linear-gradient(90deg, #ff9ec8, #ff4da6, #ff9ec8) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+}
+.hx-badge .dot { background: #ff4da6 !important; }
+.dn-btn, .dn-btn:hover {
+  background: #ff4da6 !important;
+  color: #1a0a14 !important;
+  border-color: #ff4da6 !important;
+}
+.dn-btn-ghost {
+  border-color: #ff4da688 !important;
+  color: #ff9ec8 !important;
+}
+.dn-btn-ghost:hover {
+  background: #ff4da622 !important;
+  color: #ff4da6 !important;
+}
+body.use-bg {
+  background-color: #12010c !important;
+}
+.auth-submit { background: #ff4da6 !important; color: #1a0a14 !important; }
+.auth-submit:hover { background: #ff6bb5 !important; }
+.btn-discord {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 48px;
+  margin-top: 10px;
+  border: 0;
+  border-radius: 10px;
+  background: #5865F2 !important;
+  color: #fff !important;
+  font-weight: 700;
+  text-decoration: none !important;
+}
+.btn-discord:hover { filter: brightness(1.08); color: #fff !important; }
