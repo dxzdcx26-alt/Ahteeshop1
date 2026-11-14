@@ -1,14 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
-import { createSession, publicUser, SESSION_COOKIE, isSameOriginRequest } from "@/lib/auth";\nimport { enforceRateLimit } from "@/lib/rate-limit";
+import { createSession, publicUser, SESSION_COOKIE, isSameOriginRequest } from "@/lib/auth";
+import { enforceRateLimit } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
-  if (!isSameOriginRequest(req)) return NextResponse.json({ status: false, message: "คำขอข้ามเว็บไซต์ถูกปฏิเสธ" }, { status: 403 });\n  const ipLimit = await enforceRateLimit(req, "auth-login-ip", 30);\n  if (ipLimit) return ipLimit;
+  if (!isSameOriginRequest(req)) return NextResponse.json({ status: false, message: "คำขอข้ามเว็บไซต์ถูกปฏิเสธ" }, { status: 403 });
+  const ipLimit = await enforceRateLimit(req, "auth-login-ip", 30);
+  if (ipLimit) return ipLimit;
   try {
     const body = await req.json();
     const username = String(body.username || "").trim();
-    const password = String(body.password || "");\n    const accountLimit = await enforceRateLimit(req, "auth-login-account", 8, 15 * 60 * 1000, username.toLowerCase());\n    if (accountLimit) return accountLimit;
+    const password = String(body.password || "");
+    const accountLimit = await enforceRateLimit(req, "auth-login-account", 8, 15 * 60 * 1000, username.toLowerCase());
+    if (accountLimit) return accountLimit;
 
     if (!username || !password) {
       return NextResponse.json({ status: false, message: "กรุณากรอกชื่อผู้ใช้และรหัสผ่าน" }, { status: 400 });
