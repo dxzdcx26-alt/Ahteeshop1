@@ -45,7 +45,7 @@ export async function enforceRateLimit(
         "expiresAt" = ${expiresAt}
       RETURNING "count", "windowStartedAt"
     `;
-    const current = Number(rows[0]?.count ?? 0);
+    if (Math.random() < 0.01) {\n      await db.rateLimitBucket.deleteMany({ where: { expiresAt: { lt: now } } });\n    }\n\n    const current = Number(rows[0]?.count ?? 0);
     const startedAt = rows[0]?.windowStartedAt ?? now;
     const retryAfter = Math.max(1, Math.ceil((startedAt.getTime() + windowMs - now.getTime()) / 1000));
 
