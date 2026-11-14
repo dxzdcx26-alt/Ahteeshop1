@@ -7,10 +7,8 @@ import { POST as login } from "../src/app/api/auth/login/route";
 import { POST as register } from "../src/app/api/auth/register/route";
 
 const createdUserIds: string[] = [];
-const testIps = new Set<string>();
 
 function request(path: string, body: unknown, ip: string) {
-  testIps.add(ip);
   return new NextRequest(`https://shop.example${path}`, {
     method: "POST",
     headers: {
@@ -97,4 +95,7 @@ afterAll(async () => {
   if (createdUserIds.length) {
     await db.user.deleteMany({ where: { id: { in: createdUserIds } } });
   }
-  // CI uses an isolated ephemeral schema; clear limiter rows created by these tests.\n  await db.rateLimitBucket.deleteMany({});\n  await db.$disconnect();\n});\n
+  // CI uses an isolated ephemeral schema; clear limiter rows created by these tests.
+  await db.rateLimitBucket.deleteMany({});
+  await db.$disconnect();
+});
