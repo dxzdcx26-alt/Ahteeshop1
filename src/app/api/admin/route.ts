@@ -105,18 +105,21 @@ export async function POST(req: NextRequest) {
         const t = await db.topupRequest.findUnique({ where: { id } });
         if (!t || t.status !== "pending")
           return NextResponse.json({ status: false, message: "รายการนี้ถูกดำเนินการแล้ว" }, { status: 400 });
-        await db.$transaction(async (tx) => {
-          await tx.topupRequest.update({
-            where: { id },
+        const processed = await db.$transaction(async (tx) => {
+          const claimed = await tx.topupRequest.updateMany({
+            where: { id, status: "pending" },
             data: { status: approve ? "approved" : "rejected", processedAt: new Date(), adminNote: String(body.note || "") },
           });
+          if (claimed.count !== 1) return false;
           if (approve) {
             await tx.user.update({ where: { id: t.userId }, data: { balance: { increment: t.amount } } });
             await tx.transaction.create({
               data: { userId: t.userId, type: "topup", amount: t.amount, detail: `เติมเงิน ${t.amount} บาท` },
             });
           }
+          return true;
         });
+        if (!processed) return NextResponse.json({ status: false, message: "รายการนี้ถูกดำเนินการแล้ว" }, { status: 409 });
         return NextResponse.json({ status: true, message: approve ? "อนุมัติเติมเงินแล้ว" : "ปฏิเสธรายการแล้ว" });
       }
 
