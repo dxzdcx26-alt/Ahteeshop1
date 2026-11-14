@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { getSessionUser } from "@/lib/auth";
+import { getSessionUser, isSameOriginRequest } from "@/lib/auth";
 
 async function requireAdmin(req: NextRequest) {
   const user = await getSessionUser(req);
@@ -43,6 +43,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  if (!isSameOriginRequest(req)) return NextResponse.json({ status: false, message: "คำขอข้ามเว็บไซต์ถูกปฏิเสธ" }, { status: 403 });
   const admin = await requireAdmin(req);
   if (!admin) return NextResponse.json({ status: false, message: "ไม่ได้รับอนุญาต" }, { status: 403 });
 
