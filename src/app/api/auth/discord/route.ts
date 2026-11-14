@@ -1,27 +1,34 @@
+import { randomBytes } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
+const STATE_COOKIE = "ahtee_discord_oauth_state";
 
 export async function GET(req: NextRequest) {
   const clientId = process.env.DISCORD_CLIENT_ID;
   if (!clientId) {
-    return NextResponse.json(
-      { status: "fail", message: "ยังไม่ได้ตั้ง DISCORD_CLIENT_ID" },
-      { status: 500 }
-    );
+    return NextResponse.json({ status: "fail", message: "ยังไม่ได้ตั้ง DISCORD_CLIENT_ID" }, { status: 500 });
   }
 
   const origin = req.nextUrl.origin;
-  const redirectUri =
-    process.env.DISCORD_REDIRECT_URI || `${origin}/api/auth/discord/callback`;
-
+  const redirectUri = process.env.DISCORD_REDIRECT_URI || `${origin}/api/auth/discord/callback`;
+  const state = randomBytes(32).toString("hex");
   const params = new URLSearchParams({
     client_id: clientId,
     redirect_uri: redirectUri,
     response_type: "code",
     scope: "identify email",
     prompt: "consent",
+    state,
   });
 
-  return NextResponse.redirect(`https://discord.com/api/oauth2/authorize?${params}`);
+  const response = NextResponse.redirect(`https://discord.com/api/oauth2/authorize?${params.toString()}`);
+  response.cookies.set(STATE_COOKIE, state, {
+    httpOnly: true,
+    secure: req.nextUrl.protocol === "https:",
+    sameSite: "lax",
+    maxAge: 600,
+    path: "/",
+  });
+  return response;
 }
