@@ -1,11 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // output: "standalone", // disabled for Vercel serverless
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  reactStrictMode: false,
+  // Vercel serverless deployment does not require standalone output.
+  reactStrictMode: true,
   images: {
     unoptimized: true,
   },
