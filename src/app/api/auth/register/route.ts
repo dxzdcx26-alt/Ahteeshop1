@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
-import { createSession, publicUser, SESSION_COOKIE, isSameOriginRequest } from "@/lib/auth";\nimport { enforceRateLimit } from "@/lib/rate-limit";
+import { createSession, publicUser, SESSION_COOKIE, isSameOriginRequest } from "@/lib/auth";
+import { enforceRateLimit } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
-  if (!isSameOriginRequest(req)) return NextResponse.json({ status: false, message: "คำขอข้ามเว็บไซต์ถูกปฏิเสธ" }, { status: 403 });\n  const ipLimit = await enforceRateLimit(req, "auth-register-ip", 5, 60 * 60 * 1000);\n  if (ipLimit) return ipLimit;
+  if (!isSameOriginRequest(req)) return NextResponse.json({ status: false, message: "คำขอข้ามเว็บไซต์ถูกปฏิเสธ" }, { status: 403 });
+  const ipLimit = await enforceRateLimit(req, "auth-register-ip", 5, 60 * 60 * 1000);
+  if (ipLimit) return ipLimit;
   try {
     const body = await req.json();
     const username = String(body.username || "").trim();
