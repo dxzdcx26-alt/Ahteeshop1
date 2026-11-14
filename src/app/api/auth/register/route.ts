@@ -42,6 +42,7 @@ export async function POST(req: NextRequest) {
     const res = NextResponse.json({ status: true, message: "สมัครสมาชิกสำเร็จ", user: publicUser(user) });
     res.cookies.set(SESSION_COOKIE, token, {
       httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       expires: expiresAt,
       path: "/",
