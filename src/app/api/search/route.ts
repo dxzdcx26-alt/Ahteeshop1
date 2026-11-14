@@ -1,17 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: NextRequest) {
-  const q = (req.nextUrl.searchParams.get("q") || "").trim();
+  const q = (req.nextUrl.searchParams.get("q") || "").trim().slice(0, 100);
   if (!q) return NextResponse.json({ status: true, q, products: [] });
 
   const products = await db.product.findMany({
     where: {
       active: true,
-      name: { contains: q },
+      name: { contains: q, mode: "insensitive" },
     },
     include: { _count: { select: { items: { where: { sold: false } } } } },
     take: 40,
+    orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
   });
 
   return NextResponse.json({
