@@ -64,3 +64,24 @@ describe("API security wiring", () => {
     expect(source).toContain("claimed.count !== 1");
   });
 });
+
+
+describe("authentication rate-limit wiring", () => {
+  test("login applies both IP and account-scoped limits", () => {
+    const source = readFileSync("src/app/api/auth/login/route.ts", "utf8");
+    expect(source).toContain('enforceRateLimit(req, "auth-login-ip", 30)');
+    expect(source).toContain('enforceRateLimit(req, "auth-login-account", 8');
+  });
+
+  test("registration applies an IP-scoped limit", () => {
+    const source = readFileSync("src/app/api/auth/register/route.ts", "utf8");
+    expect(source).toContain('enforceRateLimit(req, "auth-register-ip", 5');
+  });
+
+  test("rate limiter uses an atomic PostgreSQL upsert and fails closed", () => {
+    const source = readFileSync("src/lib/rate-limit.ts", "utf8");
+    expect(source).toContain('ON CONFLICT ("key") DO UPDATE');
+    expect(source).toContain('status: 429');
+    expect(source).toContain('status: 503');
+  });
+});

@@ -217,3 +217,12 @@ model RewardItem {
   active    Boolean  @default(true)
   createdAt DateTime @default(now())
 }
+
+
+model RateLimitBucket {
+  key             String   @id
+  count           Int      @default(0)
+  windowStartedAt DateTime
+  expiresAt       DateTime
+  @@index([expiresAt])
+}
