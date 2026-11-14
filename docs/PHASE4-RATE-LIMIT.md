@@ -28,4 +28,4 @@ Do not run `prisma db push --accept-data-loss` against Production.
 
 ## Verification
 
-CI creates a disposable PostgreSQL service, runs `prisma db push` against that isolated database, and then runs the authentication API integration tests. Those tests create and remove test users/sessions and clear rate-limit buckets in the disposable CI database. They do not connect to Production.
+CI creates a disposable PostgreSQL service, runs `prisma db push` against that isolated database, and then runs the authentication and commerce API integration tests. They cover real database-backed login/registration, session creation, product listing, concurrent stock reservation, duplicate top-up references, one-time admin approval credits, and reward stock/points contention. Those tests create and remove test users/sessions and clear rate-limit buckets in the disposable CI database. They do not connect to Production.
