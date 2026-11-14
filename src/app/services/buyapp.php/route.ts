@@ -9,28 +9,62 @@ export async function POST(req: NextRequest) {
   if (!user) return NextResponse.json({ status: "fail", message: "กรุณาเข้าสู่ระบบ" }, { status: 401 });
 
   const form = await req.formData().catch(() => null);
-  const csrf = String(form?.get("csrf") || "");
+  if (!form) return NextResponse.json({ status: "fail", message: "ข้อมูลไม่ถูกต้อง" }, { status: 400 });
+  const csrf = String(form.get("csrf") || "");
   if (!(await verifyCsrf(req, csrf))) return NextResponse.json({ status: "fail", message: "หมดอายุ ลองอีกครั้ง" }, { status: 403 });
 
-  const id = String(form?.get("id") || "");
-  const app = await db.appProduct.findFirst({ where: { OR: [{ id }, { extId: Number(id) || -1 }] } });
-  if (!app || !app.active) return NextResponse.json({ status: "fail", message: "ไม่พบแอพนี้" });
-  if (app.stock <= 0) return NextResponse.json({ status: "fail", message: "สินค้าหมด" });
+  const id = String(form.get("id") || "").trim();
+  if (!id) return NextResponse.json({ status: "fail", message: "กรุณาเลือกสินค้า" }, { status: 400 });
 
-  const fresh = await db.user.findUnique({ where: { id: user.id } });
-  if (!fresh) return NextResponse.json({ status: "fail", message: "ไม่พบบัญชี" });
-  if (fresh.balance < app.price) return NextResponse.json({ status: "fail", message: "ยอดเงินไม่เพียงพอ กรุณาเติมเงิน" });
+  try {
+    const result = await db.$transaction(async (tx) => {
+      const app = await tx.appProduct.findFirst({ where: { OR: [{ id }, { extId: Number(id) || -1 }] } });
+      if (!app || !app.active) throw new Error("APP_NOT_FOUND");
+      if (!Number.isFinite(app.price) || app.price < 0) throw new Error("APP_INVALID_PRICE");
 
-  const payload = app.detail || "";
-  const no = orderNo("APP");
-  await db.$transaction(async (txc) => {
-    const still = await txc.appProduct.findUnique({ where: { id: app.id } });
-    if (!still || still.stock <= 0) throw new Error("out");
-    await txc.appProduct.update({ where: { id: app.id }, data: { stock: { decrement: 1 } } });
-    await txc.user.update({ where: { id: fresh.id }, data: { balance: { decrement: app.price } } });
-    await txc.appOrder.create({ data: { orderNo: no, userId: fresh.id, appId: app.id, appName: app.name, total: app.price, payload, status: "success" } });
-    await txc.transaction.create({ data: { userId: fresh.id, type: "buyapp", amount: -app.price, detail: `ซื้อแอพ ${app.name}` } });
-  });
-  await inboxMsg(user.id, `สั่งซื้อสำเร็จ: ${app.name}`, `รายการ: ${app.name}\nยอดชำระ: ${app.price} บาท\nOrder: ${no}\n\nข้อมูลที่ได้รับ:\n${payload || "ติดต่อร้านเพื่อรับข้อมูล"}`, payload);
-  return NextResponse.json({ status: "success", message: `สั่งซื้อ ${app.name} สำเร็จ — ข้อมูลถูกส่งไปที่กล่องข้อความและหน้า แอพ Premium` });
+      const stock = await tx.appProduct.updateMany({
+        where: { id: app.id, active: true, stock: { gt: 0 } },
+        data: { stock: { decrement: 1 } },
+      });
+      if (stock.count !== 1) throw new Error("APP_OUT_OF_STOCK");
+
+      const debit = await tx.user.updateMany({
+        where: { id: user.id, balance: { gte: app.price } },
+        data: { balance: { decrement: app.price } },
+      });
+      if (debit.count !== 1) throw new Error("APP_INSUFFICIENT_BALANCE");
+
+      const no = orderNo("APP");
+      const payload = app.detail || "";
+      await tx.appOrder.create({
+        data: { orderNo: no, userId: user.id, appId: app.id, appName: app.name, total: app.price, payload, status: "success" },
+      });
+      await tx.transaction.create({
+        data: { userId: user.id, type: "buyapp", amount: -app.price, detail: `ซื้อแอพ ${app.name}` },
+      });
+      return { no, app, payload };
+    });
+
+    await inboxMsg(
+      user.id,
+      `สั่งซื้อสำเร็จ: ${result.app.name}`,
+      `รายการ: ${result.app.name}\nยอดชำระ: ${result.app.price} บาท\nOrder: ${result.no}\n\nข้อมูลที่ได้รับ:\n${result.payload || "ติดต่อร้านเพื่อรับข้อมูล"}`,
+      result.payload
+    );
+    return NextResponse.json({ status: "success", message: `สั่งซื้อ ${result.app.name} สำเร็จ — ข้อมูลถูกส่งไปที่กล่องข้อความและหน้า แอพ Premium` });
+  } catch (error) {
+    const code = error instanceof Error ? error.message : "";
+    const known: Record<string, [string, number]> = {
+      APP_NOT_FOUND: ["ไม่พบแอพนี้", 404],
+      APP_INVALID_PRICE: ["ราคาสินค้าไม่ถูกต้อง กรุณาติดต่อร้านค้า", 409],
+      APP_OUT_OF_STOCK: ["สินค้าหมดแล้ว", 409],
+      APP_INSUFFICIENT_BALANCE: ["ยอดเงินไม่เพียงพอ กรุณาเติมเงิน", 400],
+    };
+    if (known[code]) {
+      const [message, status] = known[code];
+      return NextResponse.json({ status: "fail", message }, { status });
+    }
+    console.error("[POST /services/buyapp.php] Purchase failed:", error);
+    return NextResponse.json({ status: "fail", message: "สั่งซื้อไม่สำเร็จ กรุณาลองใหม่" }, { status: 500 });
+  }
 }
