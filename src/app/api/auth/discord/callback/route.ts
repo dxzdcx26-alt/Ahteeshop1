@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
     const userRes = await fetch("https://discord.com/api/users/@me", { headers: { Authorization: token.token_type + " " + token.access_token }, cache: "no-store" });
     if (!userRes.ok) return loginRedirect(origin, "user", secure);
     const dUser = await userRes.json() as DiscordUser;
-    let user = await db.user.findFirst({ where: { OR: [{ discordId: dUser.id }, { username: "dc_" + dUser.id }] } });
+    let user = await db.user.findFirst({ where: { discordId: dUser.id } });
     if (!user) {
       const base = (dUser.global_name || dUser.username || "user").replace(/[^a-zA-Z0-9_\u0E00-\u0E7F]/g, "").slice(0, 16) || "user";
       let username = base;
