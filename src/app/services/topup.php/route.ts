@@ -45,9 +45,11 @@ export async function POST(req: NextRequest) {
     const rc = await db.redeemCode.findUnique({ where: { code } });
     if (!rc || rc.used) return NextResponse.json({ status: "fail", message: "โค้ดไม่ถูกต้องหรือถูกใช้ไปแล้ว" });
     await db.$transaction(async (txc) => {
-      const still = await txc.redeemCode.findUnique({ where: { code } });
-      if (!still || still.used) throw new Error("used");
-      await txc.redeemCode.update({ where: { code }, data: { used: true, usedBy: user.username, usedAt: new Date() } });
+      const claimed = await txc.redeemCode.updateMany({
+        where: { code, used: false },
+        data: { used: true, usedBy: user.username, usedAt: new Date() },
+      });
+      if (claimed.count !== 1) throw new Error("used");
       await txc.user.update({ where: { id: user.id }, data: { balance: { increment: rc.amount } } });
       await txc.transaction.create({ data: { userId: user.id, type: "topup", amount: rc.amount, detail: `เติมเงินด้วยโค้ด ${code}` } });
     });
