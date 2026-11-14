@@ -4,6 +4,14 @@ import { db } from "@/lib/db";
 
 export const SESSION_COOKIE = "ahtee_session";
 
+/** Reject cross-origin browser mutations while allowing non-browser API clients. */
+export function isSameOriginRequest(req: NextRequest): boolean {
+  const origin = req.headers.get("origin");
+  if (origin && origin !== req.nextUrl.origin) return false;
+  if (req.headers.get("sec-fetch-site") === "cross-site") return false;
+  return true;
+}
+
 export async function createSession(userId: string) {
   const token = randomBytes(32).toString("hex");
   const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30);

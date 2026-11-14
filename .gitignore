@@ -62,3 +62,11 @@ scripts/
 tool-results/
 dev.log
 server.log
+
+# local secrets and database files
+/.env
+/.env.*
+!/.env.example
+/db/*.db
+/db/*.sqlite
+/db/*.sqlite3

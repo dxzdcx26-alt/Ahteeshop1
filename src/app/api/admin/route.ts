@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { getSessionUser } from "@/lib/auth";
+import { getSessionUser, isSameOriginRequest } from "@/lib/auth";
 
 async function requireAdmin(req: NextRequest) {
   const user = await getSessionUser(req);
@@ -43,6 +43,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  if (!isSameOriginRequest(req)) return NextResponse.json({ status: false, message: "คำขอข้ามเว็บไซต์ถูกปฏิเสธ" }, { status: 403 });
   const admin = await requireAdmin(req);
   if (!admin) return NextResponse.json({ status: false, message: "ไม่ได้รับอนุญาต" }, { status: 403 });
 
@@ -106,10 +107,11 @@ export async function POST(req: NextRequest) {
         if (!t || t.status !== "pending")
           return NextResponse.json({ status: false, message: "รายการนี้ถูกดำเนินการแล้ว" }, { status: 400 });
         await db.$transaction(async (tx) => {
-          await tx.topupRequest.update({
-            where: { id },
-            data: { status: approve ? "approved" : "rejected", processedAt: new Date(), adminNote: String(body.note || "") },
+          const claimed = await tx.topupRequest.updateMany({
+            where: { id, status: "pending" },
+            data: { status: approve ? "approved" : "rejected", processedAt: new Date(), adminNote: String(body.note || "").slice(0, 1000) },
           });
+          if (claimed.count !== 1) throw new Error("TOPUP_ALREADY_PROCESSED");
           if (approve) {
             await tx.user.update({ where: { id: t.userId }, data: { balance: { increment: t.amount } } });
             await tx.transaction.create({
@@ -189,7 +191,10 @@ export async function POST(req: NextRequest) {
       default:
         return NextResponse.json({ status: false, message: "คำสั่งไม่ถูกต้อง" }, { status: 400 });
     }
-  } catch {
+  } catch (error) {
+    if (error instanceof Error && error.message === "TOPUP_ALREADY_PROCESSED") {
+      return NextResponse.json({ status: false, message: "รายการนี้ถูกดำเนินการแล้ว" }, { status: 409 });
+    }
     return NextResponse.json({ status: false, message: "เกิดข้อผิดพลาด" }, { status: 500 });
   }
 }

@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
-import { createSession, publicUser, SESSION_COOKIE } from "@/lib/auth";
+import { createSession, publicUser, SESSION_COOKIE, isSameOriginRequest } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
+  if (!isSameOriginRequest(req)) return NextResponse.json({ status: false, message: "คำขอข้ามเว็บไซต์ถูกปฏิเสธ" }, { status: 403 });
   try {
     const body = await req.json();
     const username = String(body.username || "").trim();
@@ -42,6 +43,7 @@ export async function POST(req: NextRequest) {
     const res = NextResponse.json({ status: true, message: "สมัครสมาชิกสำเร็จ", user: publicUser(user) });
     res.cookies.set(SESSION_COOKIE, token, {
       httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       expires: expiresAt,
       path: "/",
