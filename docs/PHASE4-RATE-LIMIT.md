@@ -16,13 +16,13 @@ Expired buckets are opportunistically pruned. The database index on `expiresAt` 
 
 This change adds `RateLimitBucket`. Apply the migration **before deploying the application code to Production**, otherwise login and registration will return HTTP 503 because the limiter deliberately fails closed.
 
-With the intended Production `DATABASE_URL` configured in a secure environment, review the migration and run:
+Review the SQL file and apply it once using the managed PostgreSQL provider SQL editor (or an authenticated `psql` session) against the intended Production database:
 
 ```bash
-bunx prisma migrate deploy
+psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f prisma/migrations/20261114000100_add_rate_limit_bucket/migration.sql
 ```
 
-The migration only creates the `RateLimitBucket` table and its expiry index. It does not alter user, order, balance, transaction, or payment records.
+This repository previously used Prisma `db push` and has no baseline migration history. Do not assume `prisma migrate deploy` can safely reconcile the existing production schema without first establishing and reviewing a migration baseline. The supplied SQL only creates the `RateLimitBucket` table and its expiry index. It does not alter user, order, balance, transaction, or payment records.
 
 Do not run `prisma db push --accept-data-loss` against Production.
 
