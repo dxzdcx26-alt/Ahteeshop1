@@ -22,8 +22,11 @@ export async function POST(req: NextRequest) {
 
   try {
     const result = await db.$transaction(async (tx) => {
-      const product = await tx.product.findUnique({ where: { id: productId } });
-      if (!product || !product.active) throw new PurchaseError("NOT_FOUND");
+      const product = await tx.product.findUnique({
+        where: { id: productId },
+        include: { category: { select: { active: true } } },
+      });
+      if (!product || !product.active || !product.category.active) throw new PurchaseError("NOT_FOUND");
       if (!Number.isFinite(product.price) || product.price < 0) throw new PurchaseError("INVALID_PRICE");
 
       const total = product.price * count;
