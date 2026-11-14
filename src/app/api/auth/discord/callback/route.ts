@@ -1,10 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import { randomBytes } from "crypto";
+import { randomBytes, timingSafeEqual } from "crypto";
 import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
 import { createSession, SESSION_COOKIE } from "@/lib/auth-extra";
 
 export const dynamic = "force-dynamic";
+const STATE_COOKIE = "ahtee_discord_oauth_state";
+
+function loginRedirect(origin: string, query: string) {
+  const response = NextResponse.redirect(`${origin}/?page=login&discord=${query}`);
+  response.cookies.set(STATE_COOKIE, "", { httpOnly: true, secure: origin.startsWith("https:"), sameSite: "lax", expires: new Date(0), path: "/" });
+  return response;
+}
 
 type DiscordToken = {
   access_token: string;
@@ -27,15 +34,22 @@ export async function GET(req: NextRequest) {
   const code = req.nextUrl.searchParams.get("code");
   const err = req.nextUrl.searchParams.get("error");
   const origin = req.nextUrl.origin;
+  const expectedState = req.cookies.get(STATE_COOKIE)?.value || "";
+  const receivedState = req.nextUrl.searchParams.get("state") || "";
+  const expectedBytes = Buffer.from(expectedState);
+  const receivedBytes = Buffer.from(receivedState);
+  if (!expectedState || expectedBytes.length !== receivedBytes.length || !timingSafeEqual(expectedBytes, receivedBytes)) {
+    return loginRedirect(origin, "state");
+  }
 
   if (err || !code) {
-    return NextResponse.redirect(`${origin}/?page=login&discord=error`);
+    return loginRedirect(origin, "error");
   }
 
   const clientId = process.env.DISCORD_CLIENT_ID;
   const clientSecret = process.env.DISCORD_CLIENT_SECRET;
   if (!clientId || !clientSecret) {
-    return NextResponse.redirect(`${origin}/?page=login&discord=config`);
+    return loginRedirect(origin, "config");
   }
 
   const redirectUri =
@@ -55,7 +69,7 @@ export async function GET(req: NextRequest) {
     });
     if (!tokenRes.ok) {
       console.error("discord token", await tokenRes.text());
-      return NextResponse.redirect(`${origin}/?page=login&discord=token`);
+      return loginRedirect(origin, "token");
     }
     const token = (await tokenRes.json()) as DiscordToken;
 
@@ -63,7 +77,7 @@ export async function GET(req: NextRequest) {
       headers: { Authorization: `${token.token_type} ${token.access_token}` },
     });
     if (!userRes.ok) {
-      return NextResponse.redirect(`${origin}/?page=login&discord=user`);
+      return loginRedirect(origin, "user");
     }
     const dUser = (await userRes.json()) as DiscordUser;
 
@@ -103,13 +117,20 @@ export async function GET(req: NextRequest) {
     res.cookies.set(SESSION_COOKIE, sessionToken, {
       httpOnly: true,
       sameSite: "lax",
-      secure: origin.startsWith("https"),
+      secure: origin.startsWith("https:"),
       expires: expiresAt,
+      path: "/",
+    });
+    res.cookies.set(STATE_COOKIE, "", {
+      httpOnly: true,
+      secure: origin.startsWith("https:"),
+      sameSite: "lax",
+      expires: new Date(0),
       path: "/",
     });
     return res;
   } catch (e) {
     console.error("discord oauth", e);
-    return NextResponse.redirect(`${origin}/?page=login&discord=error`);
+    return loginRedirect(origin, "error");
   }
 }
