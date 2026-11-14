@@ -97,4 +97,4 @@ afterAll(async () => {
   if (createdUserIds.length) {
     await db.user.deleteMany({ where: { id: { in: createdUserIds } } });
   }
-  // CI uses an isolated ephemeral schema; clear limiter rows created by these tests.\n  await db.rateLimitBucket.deleteMany({});\n});\n
+  // CI uses an isolated ephemeral schema; clear limiter rows created by these tests.\n  await db.rateLimitBucket.deleteMany({});\n  await db.$disconnect();\n});\n
