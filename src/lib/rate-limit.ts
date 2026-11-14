@@ -46,7 +46,7 @@ export async function enforceRateLimit(
       RETURNING "count", "windowStartedAt"
     `;
     if (Math.random() < 0.01) {
-      await db.rateLimitBucket.deleteMany({ where: { expiresAt: { lt: now } } });
+      await db.rateLimitBucket.deleteMany({ where: { expiresAt: { lt: now } } }).catch(() => {});
     }
 
     const current = Number(rows[0]?.count ?? 0);
