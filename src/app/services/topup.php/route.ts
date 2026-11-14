@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { promises as fs } from "fs";
+import { randomBytes } from "crypto";
 import path from "path";
 import { db } from "@/lib/db";
 import { getSessionUser, tx, inboxMsg } from "@/lib/auth-extra";
@@ -25,12 +26,23 @@ export async function POST(req: NextRequest) {
   if (method === "slip") {
     const amount = Number(form?.get("amount") || 0);
     const slip = form?.get("slip");
-    if (!amount || amount <= 0) return NextResponse.json({ status: "fail", message: "กรุณาระบุจำนวนเงิน" });
-    if (!slip || typeof slip === "string") return NextResponse.json({ status: "fail", message: "กรุณาแนบรูปสลิป" });
-    const buf = Buffer.from(await (slip as File).arrayBuffer());
-    if (buf.length > 5 * 1024 * 1024) return NextResponse.json({ status: "fail", message: "ไฟล์ใหญ่เกิน 5MB" });
-    const ext = (slip as File).name.split(".").pop()?.toLowerCase().replace(/[^a-z0-9]/g, "") || "png";
-    const fname = `slip_${user.id.slice(-6)}_${Date.now()}.${ext}`;
+    if (!Number.isFinite(amount) || amount < 1 || amount > 100000) {
+      return NextResponse.json({ status: "fail", message: "จำนวนเงินต้องอยู่ระหว่าง 1 - 100,000 บาท" }, { status: 400 });
+    }
+    if (!slip || typeof slip === "string") return NextResponse.json({ status: "fail", message: "กรุณาแนบรูปสลิป" }, { status: 400 });
+    const file = slip as File;
+    if (file.size <= 0 || file.size > 5 * 1024 * 1024) {
+      return NextResponse.json({ status: "fail", message: "ไฟล์ต้องมีขนาดไม่เกิน 5MB" }, { status: 400 });
+    }
+    const buf = Buffer.from(await file.arrayBuffer());
+    const formats = [
+      { ext: "png", valid: buf.length >= 8 && buf.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])) },
+      { ext: "jpg", valid: buf.length >= 3 && buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff },
+      { ext: "webp", valid: buf.length >= 12 && buf.toString("ascii", 0, 4) === "RIFF" && buf.toString("ascii", 8, 12) === "WEBP" },
+    ];
+    const format = formats.find((candidate) => candidate.valid);
+    if (!format) return NextResponse.json({ status: "fail", message: "รองรับเฉพาะไฟล์ภาพ PNG, JPG หรือ WEBP" }, { status: 400 });
+    const fname = `slip_${randomBytes(16).toString("hex")}.${format.ext}`;
     const dir = path.join(process.cwd(), "public", "uploads");
     await fs.mkdir(dir, { recursive: true });
     await fs.writeFile(path.join(dir, fname), buf);
