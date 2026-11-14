@@ -97,11 +97,4 @@ afterAll(async () => {
   if (createdUserIds.length) {
     await db.user.deleteMany({ where: { id: { in: createdUserIds } } });
   }
-  await db.rateLimitBucket.deleteMany({
-    where: {
-      OR: [
-        ...Array.from(testIps).map((ip) => ({ key: { contains: ip } })),
-      ],
-    },
-  }).catch(() => {});
-});
+  // CI uses an isolated ephemeral schema; clear limiter rows created by these tests.\n  await db.rateLimitBucket.deleteMany({});\n});\n
