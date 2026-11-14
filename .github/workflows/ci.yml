@@ -11,6 +11,23 @@ permissions:
 jobs:
   checks:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: ci
+          POSTGRES_PASSWORD: ci
+          POSTGRES_DB: ahteeshop_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U ci -d ahteeshop_ci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://ci:ci@localhost:5432/ahteeshop_ci?schema=public
+      NEXT_TELEMETRY_DISABLED: 1
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -28,8 +45,9 @@ jobs:
 
       - name: Generate Prisma client
         run: bun run db:generate
-        env:
-          DATABASE_URL: file:./db/ci.db
+
+      - name: Create ephemeral CI schema
+        run: bunx prisma db push
 
       - name: Lint
         run: bun run lint
@@ -42,6 +60,3 @@ jobs:
 
       - name: Build
         run: bun run build
-        env:
-          DATABASE_URL: file:./db/ci.db
-          NEXT_TELEMETRY_DISABLED: 1
