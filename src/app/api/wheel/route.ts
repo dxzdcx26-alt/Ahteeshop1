@@ -1,7 +1,7 @@
 import { randomInt } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { getSessionUser, publicUser } from "@/lib/auth";
+import { getSessionUser, publicUser, isSameOriginRequest } from "@/lib/auth";
 import { getSettings } from "@/lib/site";
 
 function pickWeighted<T extends { weight: number }>(prizes: T[]): T {
@@ -34,6 +34,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  if (!isSameOriginRequest(req)) return NextResponse.json({ status: false, message: "คำขอข้ามเว็บไซต์ถูกปฏิเสธ" }, { status: 403 });
   const user = await getSessionUser(req);
   if (!user) return NextResponse.json({ status: false, message: "กรุณาเข้าสู่ระบบ" }, { status: 401 });
 
