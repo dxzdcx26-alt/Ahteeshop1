@@ -68,13 +68,20 @@ export async function POST(req: NextRequest) {
         const approve = action === "topup_ok";
         const note = s("note");
         const credit = form.has("amount") && n("amount") > 0 ? n("amount") : t.amount;
-        await db.$transaction(async (txc) => {
-          await txc.topupRequest.update({ where: { id }, data: { status: approve ? "approved" : "rejected", adminNote: note, processedAt: new Date() } });
+        if (approve && (!Number.isFinite(credit) || credit <= 0 || credit > 1000000)) return j({ status: "fail", message: "จำนวนเงินไม่ถูกต้อง" }, 400);
+        const processed = await db.$transaction(async (txc) => {
+          const claimed = await txc.topupRequest.updateMany({
+            where: { id, status: "pending" },
+            data: { status: approve ? "approved" : "rejected", adminNote: note, processedAt: new Date() },
+          });
+          if (claimed.count !== 1) return false;
           if (approve && credit > 0) {
             await txc.user.update({ where: { id: t.userId }, data: { balance: { increment: credit }, points: { increment: Math.floor(credit / 10) } } });
             await txc.transaction.create({ data: { userId: t.userId, type: "topup", amount: credit, detail: `เติมเงินผ่าน ${t.method} (อนุมัติโดยแอดมิน)` } });
           }
+          return true;
         });
+        if (!processed) return j({ status: "fail", message: "รายการนี้ถูกดำเนินการแล้ว" }, 409);
         await inboxMsg(t.userId, approve ? "เติมเงินสำเร็จ" : "รายการเติมเงินถูกปฏิเสธ", approve ? `เติมเงิน ${credit} บาท สำเร็จ${note ? "\nหมายเหตุ: " + note : ""}` : `รายการเติมเงิน ${t.amount} บาท ถูกปฏิเสธ${note ? "\nหมายเหตุ: " + note : ""}`);
         return j({ status: "success" });
       }
