@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
   if (!user) return NextResponse.json({ status: false, message: "กรุณาเข้าสู่ระบบ" }, { status: 401 });
   const [settings, prizes] = await Promise.all([
     getSettings(),
-    db.wheelPrize.findMany({ orderBy: { sortOrder: "asc" } }),
+    db.wheelPrize.findMany({ where: { weight: { gt: 0 } }, orderBy: { sortOrder: "asc" } }),
   ]);
   return NextResponse.json({
     status: true,
