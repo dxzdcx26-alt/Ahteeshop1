@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
       await txc.user.update({ where: { id: user.id }, data: { balance: { increment: rc.amount } } });
       await txc.transaction.create({ data: { userId: user.id, type: "topup", amount: rc.amount, detail: `เติมเงินด้วยโค้ด ${code}` } });
     });
-    await Promise.all([inboxMsg(user.id, "เติมเงินสำเร็จ", `เติมเงินด้วยโค้ด ${code} จำนวน ${rc.amount} บาท สำเร็จ`), tx(user.id, "topup", rc.amount, `โค้ด ${code}`)]);
+    await inboxMsg(user.id, "เติมเงินสำเร็จ", `เติมเงินด้วยโค้ด ${code} จำนวน ${rc.amount} บาท สำเร็จ`);
     return NextResponse.json({ status: "success", message: `เติมเงินสำเร็จ +${rc.amount} บาท` });
   }
 
